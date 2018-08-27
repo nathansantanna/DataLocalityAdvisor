@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using TestHelper;
 using DataLocalityAdvisor;
 
@@ -67,6 +68,39 @@ namespace DataLocalityAdvisor.Test
         }
     }";
             VerifyCSharpFix(test, fixtest);
+        }
+
+        [TestMethod]
+        public void TestFindList()
+        {
+            var test = @"
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Diagnostics;
+
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {   
+            List<string> teste = new List<string>();
+              
+        }
+    }";
+            var expected = new DiagnosticResult
+            {
+                Id = "DataLocalityAdvisor",
+                Message = String.Format("Type name '{0}' contains lowercase letters", "TypeName"),
+                Severity = DiagnosticSeverity.Warning,
+                Locations =
+                    new[] {
+                        new DiagnosticResultLocation("Test0.cs", 11, 15)
+                    }
+            };
+
+            VerifyCSharpDiagnostic(test, expected);
         }
 
         protected override CodeFixProvider GetCSharpCodeFixProvider()

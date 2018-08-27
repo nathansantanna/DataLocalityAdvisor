@@ -66,6 +66,13 @@
         </Strings>
       </Button>
    
+      <Button guid="guidCommandsPackageCmdSet" id="cmdidChangeSelectionWindowCommand" priority="0x0100" type="Button">
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_WNDO_OTRWNDWS1" />
+        <Icon guid="guidImages" id="bmpPic1" />
+        <Strings>
+          <ButtonText>ChangeSelectionWindow</ButtonText>
+        </Strings>
+      </Button>
     </Buttons>
 
     <Bitmaps>
@@ -94,5 +101,10 @@
       <IDSymbol name="bmpPicStrikethrough" value="6" />
     </GuidSymbol>
   
+  
+    <GuidSymbol value="{6a514def-9fbd-422e-85b6-8bd7c46a613e}" name="guidCommandsPackageCmdSet">
+      <IDSymbol value="256" name="cmdidChangeSelectionWindowCommand" />
+    </GuidSymbol>
+
   </Symbols>
 </CommandTable>

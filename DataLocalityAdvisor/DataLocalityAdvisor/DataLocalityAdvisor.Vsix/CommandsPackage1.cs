@@ -15,9 +15,11 @@ namespace DataLocalityAdvisor.Vsix
         public const string guidAnalyzeCodePackageString = "6ddeaeb1-dec4-4ffa-8341-eb7102968291";
         public const string guidAnalyzeCodePackageCmdSetString = "91d753df-93d6-4d91-ab75-535cc3169dad";
         public const string guidImagesString = "1be07da1-faa6-4fcf-9a64-d2abd3647ef7";
+        public const string guidCommandsPackageCmdSetString = "6a514def-9fbd-422e-85b6-8bd7c46a613e";
         public static Guid guidAnalyzeCodePackage = new Guid(guidAnalyzeCodePackageString);
         public static Guid guidAnalyzeCodePackageCmdSet = new Guid(guidAnalyzeCodePackageCmdSetString);
         public static Guid guidImages = new Guid(guidImagesString);
+        public static Guid guidCommandsPackageCmdSet = new Guid(guidCommandsPackageCmdSetString);
     }
     /// <summary>
     /// Helper class that encapsulates all CommandIDs uses across VS Package.
@@ -34,5 +36,6 @@ namespace DataLocalityAdvisor.Vsix
         public const int bmpPicX = 0x0004;
         public const int bmpPicArrows = 0x0005;
         public const int bmpPicStrikethrough = 0x0006;
+        public const int cmdidChangeSelectionWindowCommand = 0x0100;
     }
 }

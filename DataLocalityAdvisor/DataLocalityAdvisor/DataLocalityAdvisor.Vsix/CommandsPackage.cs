@@ -37,6 +37,7 @@ namespace DataLocalityAdvisor.Vsix
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [Guid(CommandsPackage.PackageGuidString)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
+    [ProvideToolWindow(typeof(DataLocalityAdvisor.Vsix.ChangeSelectionWindow))]
     public sealed class CommandsPackage : AsyncPackage
     {
         /// <summary>
@@ -70,6 +71,7 @@ namespace DataLocalityAdvisor.Vsix
             // Do any initialization that requires the UI thread after switching to the UI thread.
             await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
             await AnalyzeCode.InitializeAsync(this);
+            await DataLocalityAdvisor.Vsix.ChangeSelectionWindowCommand.InitializeAsync(this);
         }
 
         #endregion
