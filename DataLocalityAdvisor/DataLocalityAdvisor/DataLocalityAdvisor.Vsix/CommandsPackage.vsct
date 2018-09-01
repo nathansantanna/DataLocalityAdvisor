@@ -44,8 +44,8 @@
     <Groups>
       <Group guid="guidAnalyzeCodePackageCmdSet" id="MyMenuGroup" priority="0x0600">
         <Parent guid="guidAnalyzeCodePackageCmdSet" id="TopLevelMenu" />
+        
       </Group>
-
     </Groups>
 
     <!--Buttons section. -->
@@ -66,9 +66,9 @@
         </Strings>
       </Button>
    
-      <Button guid="guidCommandsPackageCmdSet" id="cmdidChangeSelectionWindowCommand" priority="0x0100" type="Button">
-        <Parent guid="guidSHLMainMenu" id="IDG_VS_WNDO_OTRWNDWS1" />
-        <Icon guid="guidImages" id="bmpPic1" />
+      <Button guid="guidCommandsPackageCmdSet" id="cmdidChangeSelectionWindowCommand" priority="0x0300" type="Button">
+        <Parent guid="guidAnalyzeCodePackageCmdSet" id="MyMenuGroup" />
+        <Icon guid="guidImages" id="bmpPicSearch" />
         <Strings>
           <ButtonText>ChangeSelectionWindow</ButtonText>
         </Strings>

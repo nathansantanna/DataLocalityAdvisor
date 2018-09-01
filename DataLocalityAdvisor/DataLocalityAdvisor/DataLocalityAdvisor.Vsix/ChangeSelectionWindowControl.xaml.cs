@@ -1,5 +1,6 @@
 ﻿namespace DataLocalityAdvisor.Vsix
 {
+    using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Windows;
     using System.Windows.Controls;
@@ -26,9 +27,15 @@
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:ElementMustBeginWithUpperCaseLetter", Justification = "Default event handler naming pattern")]
         private void button1_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(
-                string.Format(System.Globalization.CultureInfo.CurrentUICulture, "Invoked '{0}'", this.ToString()),
-                "ChangeSelectionWindow");
+            List<CheckBox> Changes = new List<CheckBox>();
+            for (int i = 0; i < 10; i++)
+            {
+                CheckBox c = new CheckBox();
+                c.Content = "PossibleChange" + i;
+                Changes.Add(c);
+                ChangeList.Items.Add(Changes[i]);
+            }
+
         }
     }
 }

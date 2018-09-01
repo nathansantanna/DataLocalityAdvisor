@@ -55,7 +55,7 @@ namespace DataLocalityAdvisor
             var tree = CSharpSyntaxTree.ParseText(test);
             var root = tree.GetRoot();
             var variablesDeclarations = root.DescendantNodes().OfType<VariableDeclarationSyntax>().First();
-            var typeToFind = System.Collections.ICollection;
+            //var typeToFind = System.Collections.ICollection;
             //if (variablesDeclarations.Type == typeof(System.Collections)) ;
             List<string> teste = new List<string>();
             var testes = new Dictionary<string,string>();

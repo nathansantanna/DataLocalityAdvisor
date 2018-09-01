@@ -12,7 +12,8 @@
     <Grid>
         <StackPanel Orientation="Vertical">
             <TextBlock Margin="10" HorizontalAlignment="Center">ChangeSelectionWindow</TextBlock>
-            <Button Content="Click me!" Click="button1_Click" Width="120" Height="80" Name="button1"/>
+            <Button Content="AddCheckboxChanges" Click="button1_Click" Height="21" x:Name="button1" />
+            <TreeView Height="179" Name="ChangeList"/>
         </StackPanel>
     </Grid>
 </UserControl>
