@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataLocalityAdvisor\DataLocalityAdvisor.csproj" />
+    <ProjectReference Include="..\DataLocalityAdvisor\DataLocalityAnalyzer.csproj" />
   </ItemGroup>
 
 </Project>
