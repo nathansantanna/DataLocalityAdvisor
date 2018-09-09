@@ -110,7 +110,7 @@ namespace DataLocalityAdvisor.Test
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
-            return new DataLocalityAdvisorAnalyzer();
+            return new CollectionsAnalyzer();
         }
     }
 }

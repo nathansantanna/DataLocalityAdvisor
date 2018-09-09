@@ -18,16 +18,14 @@ namespace DataLocalityAdvisor
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(DataLocalityAdvisorCodeFixProvider)), Shared]
     public class DataLocalityAdvisorCodeFixProvider : CodeFixProvider
     {
-        private const string title = "Make uppercase";
 
         public sealed override ImmutableArray<string> FixableDiagnosticIds
         {
-            get { return ImmutableArray.Create(DataLocalityAdvisorAnalyzer.DiagnosticId); }
+            get { return ImmutableArray.Create(CollectionsAnalyzer.DiagnosticId); }
         }
 
         public sealed override FixAllProvider GetFixAllProvider()
         {
-            // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/FixAllProvider.md for more information on Fix All Providers
             return WellKnownFixAllProviders.BatchFixer;
         }
 
@@ -45,9 +43,9 @@ namespace DataLocalityAdvisor
             // Register a code action that will invoke the fix.
             context.RegisterCodeFix(
                 CodeAction.Create(
-                    title: title,
+                    title: Resources.LampTitle,
                     createChangedSolution: c => MakeUppercaseAsync(context.Document, declaration, c), 
-                    equivalenceKey: title),
+                    equivalenceKey: Resources.LampTitle ),
                 diagnostic);
         }
 
