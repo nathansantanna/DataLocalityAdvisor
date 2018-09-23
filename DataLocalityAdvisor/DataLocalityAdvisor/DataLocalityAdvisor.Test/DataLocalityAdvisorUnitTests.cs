@@ -15,10 +15,35 @@ namespace DataLocalityAdvisor.Test
 
         //No diagnostics expected to show up
         [TestMethod]
-        public void TestMethod1()
+        public void FindCollectionsTest()
         {
-            var test = @"";
+            var test = @"using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Diagnostics;
 
+    namespace ConsoleApplication1
+    {
+        class Program
+        {   
+             Static void main()
+            {
+                List<string> test = new List<string>();
+            }
+        }
+    }";
+            var expected = new DiagnosticResult
+            {
+                Id = "DataLocalityAdvisor",
+                Message = String.Format("Type name '{0}' contains lowercase letters", "TypeName"),
+                Severity = DiagnosticSeverity.Warning,
+                Locations =
+                    new[] {
+                        new DiagnosticResultLocation("Test0.cs", 11, 15)
+                    }
+            };
             VerifyCSharpDiagnostic(test);
         }
 
@@ -52,6 +77,7 @@ namespace DataLocalityAdvisor.Test
             };
 
             VerifyCSharpDiagnostic(test, expected);
+
 
             var fixtest = @"
     using System;

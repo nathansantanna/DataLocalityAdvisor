@@ -75,7 +75,9 @@ namespace DataLocalityAdvisor.Vsix
         {
             // Verify the current thread is the UI thread - the call to AddCommand in AnalyzeCode's constructor requires
             // the UI thread.
+#pragma warning disable VSTHRD109 // Switch instead of assert in async methods
             ThreadHelper.ThrowIfNotOnUIThread();
+#pragma warning restore VSTHRD109 // Switch instead of assert in async methods
 
             OleMenuCommandService commandService = await package.GetServiceAsync((typeof(IMenuCommandService))) as OleMenuCommandService;
             Instance = new AnalyzeCode(package, commandService);
