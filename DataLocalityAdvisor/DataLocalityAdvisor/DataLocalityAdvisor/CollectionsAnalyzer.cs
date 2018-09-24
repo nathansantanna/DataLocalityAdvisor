@@ -1,4 +1,7 @@
+using System;
+using System.Collections;
 using System.Collections.Immutable;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Operations;
@@ -20,14 +23,31 @@ namespace DataLocalityAdvisor
 
         public override void Initialize(AnalysisContext context)
         {
-            context.RegisterOperationAction(FindCollections, OperationKind.ObjectOrCollectionInitializer);
-            
+            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
+            context.RegisterSemanticModelAction(Action);
+            context.RegisterOperationBlockAction(OperAction);
         }
 
-        private void FindCollections(OperationAnalysisContext context)
+        private void OperAction(OperationBlockAnalysisContext oper)
         {
-            IObjectOrCollectionInitializerOperation creationExpression = (IObjectOrCollectionInitializerOperation)context.Operation;
-            context.ReportDiagnostic(Diagnostic.Create(Rule, context.Operation.Syntax.GetLocation()));
+            oper.ReportDiagnostic(Diagnostic.Create(Rule,oper.OwningSymbol.Locations[0]));
+            if (oper.OwningSymbol.CanBeReferencedByName && oper.OwningSymbol.Name == "ConsoleApp1")
+            {
+                var teste = ((INamedTypeSymbol) oper.OwningSymbol).GetMembers();
+            }
+      }
+
+        private void Action(SemanticModelAnalysisContext semanticModelAnalysis)
+        {
+            foreach (INamespaceOrTypeSymbol nameSpace in semanticModelAnalysis.SemanticModel.LookupNamespacesAndTypes(0))
+            {
+                var symbols = nameSpace.GetMembers();
+            }
+            foreach (INamespaceOrTypeSymbol nameSpace in semanticModelAnalysis.SemanticModel.LookupNamespacesAndTypes(1))
+            {
+                var symbols = nameSpace.GetMembers();
+            }
+
         }
     }
 }
