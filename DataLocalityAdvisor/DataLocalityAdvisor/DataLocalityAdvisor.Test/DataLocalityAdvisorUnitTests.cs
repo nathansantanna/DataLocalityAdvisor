@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 using TestHelper;
 using DataLocalityAdvisor;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace DataLocalityAdvisor.Test
 {
@@ -28,7 +29,7 @@ namespace ConsoleApplication1
         public List<string> test { get; set; }
          Static void main()
         {
-            string lororo = ""DataSetDateTime"";
+            public List<string> test { get; set; }
         }
     }
 }";
@@ -41,7 +42,6 @@ namespace ConsoleApplication1
             var expectedDiagnosisLocation = new[]
             {
                 new DiagnosticResultLocation("Test0.cs", 12, 29),
-                new DiagnosticResultLocation("Test0.cs", 15, 20) 
             };
             var expected = new DiagnosticResult(CollectionsAnalyzer.Rule,expectedDiagnosisLocation);
           

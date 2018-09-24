@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -24,30 +25,50 @@ namespace DataLocalityAdvisor
         public override void Initialize(AnalysisContext context)
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
-            context.RegisterSemanticModelAction(Action);
-            context.RegisterOperationBlockAction(OperAction);
+            context.RegisterSymbolAction(SymbolAction, SymbolKind.Property,SymbolKind.NamedType,SymbolKind.Method);
         }
 
-        private void OperAction(OperationBlockAnalysisContext oper)
+        private void SymbolAction(SymbolAnalysisContext symbolContext)
         {
-            oper.ReportDiagnostic(Diagnostic.Create(Rule,oper.OwningSymbol.Locations[0]));
-            if (oper.OwningSymbol.CanBeReferencedByName && oper.OwningSymbol.Name == "ConsoleApp1")
+            var symbol = symbolContext.Symbol;
+            var compilation = symbolContext.Compilation;
+            switch (symbolContext.Symbol.Kind)
             {
-                var teste = ((INamedTypeSymbol) oper.OwningSymbol).GetMembers();
+                case SymbolKind.Property:
+                    var list = new List<string>();
+                        if(symbolContext.Symbol.Kind == SymbolKind.ArrayType)
+                            symbolContext.ReportDiagnostic(Diagnostic.Create(Rule,symbolContext.Symbol.Locations[0]));
+                    var propSymbol = (IPropertySymbol) symbol;
+                    var we = propSymbol.IsWriteOnly;
+                    break;
+               case SymbolKind.NamedType:
+                   var typeSymbol = (ITypeSymbol) symbolContext.Symbol;
+                   foreach (var child  in typeSymbol.GetMembers())
+                   {
+                       if(symbolContext.Symbol.Kind == SymbolKind.ArrayType)
+                           symbolContext.ReportDiagnostic(Diagnostic.Create(Rule,symbolContext.Symbol.Locations[0]));
+                   }
+                   break;
+               case SymbolKind.Method:
+                   var methodSymbol = (IMethodSymbol) symbolContext.Symbol;
+                   foreach (var child  in methodSymbol.GetAttributes())
+                   {
+                       if(symbolContext.Symbol.Kind == SymbolKind.ArrayType)
+                           symbolContext.ReportDiagnostic(Diagnostic.Create(Rule,symbolContext.Symbol.Locations[0]));
+                   }
+                   break;
             }
-      }
+        }
 
-        private void Action(SemanticModelAnalysisContext semanticModelAnalysis)
+        public ISymbol[] GetLocalVariables(IMethodSymbol symbol)
         {
-            foreach (INamespaceOrTypeSymbol nameSpace in semanticModelAnalysis.SemanticModel.LookupNamespacesAndTypes(0))
-            {
-                var symbols = nameSpace.GetMembers();
-            }
-            foreach (INamespaceOrTypeSymbol nameSpace in semanticModelAnalysis.SemanticModel.LookupNamespacesAndTypes(1))
-            {
-                var symbols = nameSpace.GetMembers();
-            }
+            throw new NotImplementedException();
+        }
 
+        private void CompilationAction(CompilationAnalysisContext compilation)
+        {
+            var symbols = compilation.Compilation.GetSymbolsWithName(s => true);
+            var arrays = symbols.OfType<IArrayTypeSymbol>().ToList();
         }
     }
 }
