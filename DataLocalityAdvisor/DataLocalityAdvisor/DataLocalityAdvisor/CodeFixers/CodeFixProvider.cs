@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
@@ -11,17 +9,16 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Rename;
-using Microsoft.CodeAnalysis.Text;
 
 namespace DataLocalityAdvisor
 {
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(DataLocalityAdvisorCodeFixProvider)), Shared]
-    public class DataLocalityAdvisorCodeFixProvider : CodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(CodeFixProvider)), Shared]
+    public class CodeFixProvider : Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider
     {
 
         public sealed override ImmutableArray<string> FixableDiagnosticIds
         {
-            get { return ImmutableArray.Create(CollectionsAnalyzer.DiagnosticId); }
+            get { return ImmutableArray.Create(RoslynCommuncationAgent.DiagnosticId); }
         }
 
         public sealed override FixAllProvider GetFixAllProvider()

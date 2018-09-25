@@ -43,7 +43,7 @@ namespace ConsoleApplication1
             {
                 new DiagnosticResultLocation("Test0.cs", 12, 29),
             };
-            var expected = new DiagnosticResult(CollectionsAnalyzer.Rule,expectedDiagnosisLocation);
+            var expected = new DiagnosticResult(RoslynCommuncationAgent.Rule,expectedDiagnosisLocation);
           
             VerifyCSharpDiagnostic(source,expected);
         }
@@ -96,14 +96,14 @@ namespace ConsoleApplication1
             VerifyCSharpFix(test, fixtest);
         }
 
-        protected override CodeFixProvider GetCSharpCodeFixProvider()
+        protected override Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider GetCSharpCodeFixProvider()
         {
-            return new DataLocalityAdvisorCodeFixProvider();
+            return new CodeFixProvider();
         }
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
-            return new CollectionsAnalyzer();
+            return new RoslynCommuncationAgent();
         }
     }
 }
