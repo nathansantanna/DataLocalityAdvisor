@@ -39,6 +39,5 @@ namespace DataLocalityAdvisor
                 compilationContext.RegisterCompilationEndAction(analyzer.EndcompilationAction);
             });
         }
-
     }
 }

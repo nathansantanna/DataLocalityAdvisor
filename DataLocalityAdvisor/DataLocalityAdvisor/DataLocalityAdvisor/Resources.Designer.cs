@@ -8,8 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DataLocalityAdvisor
-{
+namespace DataLocalityAnalyzer {
     using System;
     using System.Reflection;
     
@@ -24,7 +23,7 @@ namespace DataLocalityAdvisor
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Resources {
+    internal class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -38,7 +37,7 @@ namespace DataLocalityAdvisor
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DataLocalityAnalyzer.Resources", typeof(Resources).GetTypeInfo().Assembly);
@@ -53,7 +52,7 @@ namespace DataLocalityAdvisor
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -65,7 +64,7 @@ namespace DataLocalityAdvisor
         /// <summary>
         ///   Looks up a localized string similar to Arrays are better suited for data locality.
         /// </summary>
-        public static string AnalyzerDescription {
+        internal static string AnalyzerDescription {
             get {
                 return ResourceManager.GetString("AnalyzerDescription", resourceCulture);
             }
@@ -74,7 +73,7 @@ namespace DataLocalityAdvisor
         /// <summary>
         ///   Looks up a localized string similar to Verify if this collection can be an array.
         /// </summary>
-        public static string AnalyzerMessageFormat {
+        internal static string AnalyzerMessageFormat {
             get {
                 return ResourceManager.GetString("AnalyzerMessageFormat", resourceCulture);
             }
@@ -83,7 +82,7 @@ namespace DataLocalityAdvisor
         /// <summary>
         ///   Looks up a localized string similar to Collection can be turned on array .
         /// </summary>
-        public static string AnalyzerTitle {
+        internal static string AnalyzerTitle {
             get {
                 return ResourceManager.GetString("AnalyzerTitle", resourceCulture);
             }
@@ -92,7 +91,7 @@ namespace DataLocalityAdvisor
         /// <summary>
         ///   Looks up a localized string similar to Transform into array.
         /// </summary>
-        public static string LampTitle {
+        internal static string LampTitle {
             get {
                 return ResourceManager.GetString("LampTitle", resourceCulture);
             }

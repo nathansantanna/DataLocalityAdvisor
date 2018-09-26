@@ -36,7 +36,6 @@ namespace ConsoleApplication1
         #endregion
 
         //No diagnostics expected to show up
-        [TestMethod]
         public void FindCollectionsTest()
         {
             var expectedDiagnosisLocation = new[]
