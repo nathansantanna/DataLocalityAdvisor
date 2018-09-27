@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace DataLocalityAnalyzer
 {
@@ -18,29 +19,35 @@ namespace DataLocalityAnalyzer
         public ICollection<ISymbol> GetSymbols(Compilation compilation)
         {
             List<ISymbol> returnSymbols = new List<ISymbol>();
+
             var methods = compilation.GetSymbolsWithName(s => true, SymbolFilter.Member).
                 Where(currentSymbol => currentSymbol.Kind == SymbolKind.Method);
+            
+            var propertiesSymbols = compilation.GetSymbolsWithName(s => true).Where(currentSymbol =>
+                currentSymbol.Kind == SymbolKind.Property ||
+                currentSymbol.Kind == SymbolKind.Field && !returnSymbols.Contains(currentSymbol));
 
-            foreach (SyntaxTree compilationSyntaxTree in compilation.SyntaxTrees)
+            var localSymbols = GetLocalSymbolsFromMethod(methods, compilation).Where(currentSymbol => !returnSymbols.Contains(currentSymbol));
+           
+            returnSymbols.AddRange(localSymbols);
+            returnSymbols.AddRange(propertiesSymbols );
+            return returnSymbols;
+        }
+
+        private ICollection<ISymbol> GetLocalSymbolsFromMethod(IEnumerable<ISymbol> methods, Compilation compilation)
+        {
+            List<ISymbol> returnSymbols = new List<ISymbol>();
+
+            foreach (var method in methods)
             {
-                var model = compilation.GetSemanticModel(compilationSyntaxTree);
-
-                foreach (var method in methods)
-                {
-                    int index = method.DeclaringSyntaxReferences[0].Span.End - 2;
-                    if (model.SyntaxTree.Length > index && model.IsAccessible(index, method))
-                    {
-                        returnSymbols.AddRange(model.LookupSymbols(index)
-                            .Where(symbol => symbol.Kind == SymbolKind.Local));
-                    }
-                }
-                returnSymbols.AddRange( model.Compilation.GetSymbolsWithName(s => true).
-                Where(currentSymbol => currentSymbol.Kind == SymbolKind.Property || currentSymbol.Kind == SymbolKind.Field));
+                var model = compilation.GetSemanticModel(method.Locations[0].SourceTree);
+                int index = method.DeclaringSyntaxReferences[0].Span.End - 2;
+                returnSymbols.AddRange(model.LookupSymbols(index)
+                    .Where(symbol => symbol.Kind == SymbolKind.Local && !returnSymbols.Contains(symbol)));
             }
 
             return returnSymbols;
         }
-
 
         internal void EndcompilationAction(CompilationAnalysisContext obj)
         {
