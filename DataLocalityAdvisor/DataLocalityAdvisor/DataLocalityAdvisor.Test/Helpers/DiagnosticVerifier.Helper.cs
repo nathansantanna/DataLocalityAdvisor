@@ -104,7 +104,7 @@ namespace TestHelper
         /// <param name="sources">Classes in the form of strings</param>
         /// <param name="language">The language the source code is in</param>
         /// <returns>A Tuple containing the Documents produced from the sources and their TextSpans if relevant</returns>
-        private static Document[] GetDocuments(string[] sources, string language)
+        public static Document[] GetDocuments(string[] sources, string language)
         {
             if (language != LanguageNames.CSharp && language != LanguageNames.VisualBasic)
             {
@@ -139,7 +139,7 @@ namespace TestHelper
         /// <param name="sources">Classes in the form of strings</param>
         /// <param name="language">The language the source code is in</param>
         /// <returns>A Project created out of the Documents created from the source strings</returns>
-        private static Project CreateProject(string[] sources, string language = LanguageNames.CSharp)
+        public static Project CreateProject(string[] sources, string language = LanguageNames.CSharp)
         {
             string fileNamePrefix = DefaultFilePathPrefix;
             string fileExt = language == LanguageNames.CSharp ? CSharpDefaultFileExt : VisualBasicDefaultExt;

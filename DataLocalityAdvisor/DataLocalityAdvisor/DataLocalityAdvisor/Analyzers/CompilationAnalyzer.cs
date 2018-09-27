@@ -18,19 +18,22 @@ namespace DataLocalityAnalyzer
         public ICollection<ISymbol> GetSymbols(Compilation compilation)
         {
             List<ISymbol> returnSymbols = new List<ISymbol>();
+            var methods = compilation.GetSymbolsWithName(s => true, SymbolFilter.Member).
+                Where(currentSymbol => currentSymbol.Kind == SymbolKind.Method);
+
             foreach (SyntaxTree compilationSyntaxTree in compilation.SyntaxTrees)
             {
                 var model = compilation.GetSemanticModel(compilationSyntaxTree);
-                var methods = model.Compilation.GetSymbolsWithName(s => true, SymbolFilter.Member).
-                    Where(currentSymbol => currentSymbol.Kind == SymbolKind.Method);
+
                 foreach (var method in methods)
                 {
                     int index = method.DeclaringSyntaxReferences[0].Span.End - 2;
-                    returnSymbols.AddRange(model.LookupSymbols(index)
-                    .Where(symbol => symbol.Kind == SymbolKind.Local));
-
+                    if (model.SyntaxTree.Length > index && model.IsAccessible(index, method))
+                    {
+                        returnSymbols.AddRange(model.LookupSymbols(index)
+                            .Where(symbol => symbol.Kind == SymbolKind.Local));
+                    }
                 }
-
                 returnSymbols.AddRange( model.Compilation.GetSymbolsWithName(s => true).
                 Where(currentSymbol => currentSymbol.Kind == SymbolKind.Property || currentSymbol.Kind == SymbolKind.Field));
             }
