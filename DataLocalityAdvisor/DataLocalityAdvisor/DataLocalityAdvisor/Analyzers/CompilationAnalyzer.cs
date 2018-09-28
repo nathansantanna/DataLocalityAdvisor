@@ -3,8 +3,12 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Editing;
+using Microsoft.CodeAnalysis.FindSymbols;
 
 namespace DataLocalityAnalyzer
 {
@@ -35,6 +39,25 @@ namespace DataLocalityAnalyzer
             return returnSymbols;
         }
 
+        public ICollection<ISymbol> GetCollections(Compilation compilation)
+        {
+            IEnumerable<ISymbol> symbols = GetSymbols(compilation);
+            ICollection<ISymbol> returnSymbols = new List<ISymbol>();
+            foreach (ISymbol symbol in symbols)
+            {
+                var model = compilation.GetSemanticModel(symbol.OriginalDefinition.DeclaringSyntaxReferences[0].SyntaxTree);
+                var type = symbol.DeclaringSyntaxReferences[0].GetSyntax().RawKind;
+                if (symbol.Kind == SymbolKind.Property )
+                {
+                    if(((IPropertySymbol) symbol).OriginalDefinition.Type.ContainingNamespace.Name == "Collections")
+                        returnSymbols.Add(symbol);
+                }
+
+                Debug.WriteLine(symbol.ToString());
+            }
+            return returnSymbols;
+        }
+
         private ICollection<ISymbol> GetLocalSymbolsFromMethod(IEnumerable<ISymbol> methods, Compilation compilation)
         {
             List<ISymbol> returnSymbols = new List<ISymbol>();
@@ -48,11 +71,6 @@ namespace DataLocalityAnalyzer
             }
 
             return returnSymbols;
-        }
-
-        public ICollection<ISymbol> GetCollections(IEnumerable<ISymbol> symbols, Compilation compilation)
-        {
-            throw new NotImplementedException();
         }
 
         internal void EndcompilationAction(CompilationAnalysisContext obj)

@@ -25,25 +25,43 @@ namespace DataLocalityAnalyzer.test
         [DataRow(Codes.LocalSymbolsTestString,2),
         DataRow(Codes.PropertiesTestString,2)]
         [DataTestMethod]
-        public void GetSymbolsForSimpleCompilationFile(string source,int expected)
+        public async System.Threading.Tasks.Task GetSymbolsForSimpleCompilationFileAsync(string source,int expected)
         {
-            Compilation compilation = GetProjectCompilation(new[]{source});
+            Compilation compilation = await GetProjectCompilationAsync(new[]{source});
             var localSymbols = _compilationAnalyzer.GetSymbols(compilation);
             Assert.AreEqual(localSymbols.Count,2);
         }
 
         [TestMethod]
-        public void GetSymbolsFromMultipleDocumentsWihtoutDuplicatesTest()
+        public async System.Threading.Tasks.Task GetSymbolsFromMultipleDocumentsTestAsync()
         {
-            Compilation compilation = GetProjectCompilation(Codes.MultiDoc);
+            Compilation compilation = await GetProjectCompilationAsync(Codes.MultiDoc);
             var localSymbols = _compilationAnalyzer.GetSymbols(compilation);
             Assert.AreEqual(localSymbols.Count,5);
         }
 
-        protected Compilation GetProjectCompilation(string[] docs)
+        [TestMethod]
+        public async System.Threading.Tasks.Task GetSymbolsFromMultipleDocumentsWihtoutDuplicatesTest2Async()
+        {
+            Compilation compilation = await GetProjectCompilationAsync(Codes.MultiDoc2);
+            var localSymbols = _compilationAnalyzer.GetSymbols(compilation);
+            Assert.AreEqual(localSymbols.Count,6);
+        }
+
+        [TestMethod]
+        public async System.Threading.Tasks.Task GetCollectionsSymbolsTestAsync()
+        {
+            Compilation compilation = await GetProjectCompilationAsync(Codes.MultiDoc2);
+            var collections = _compilationAnalyzer.GetCollections(compilation);
+            Assert.AreEqual(collections.Count,3);
+        }
+     
+
+
+        protected async System.Threading.Tasks.Task<Compilation> GetProjectCompilationAsync(string[] docs)
         {
             var project = DiagnosticVerifier.CreateProject(docs);
-            return project.GetCompilationAsync().Result;
+            return await project.GetCompilationAsync();
         }
     }
 }

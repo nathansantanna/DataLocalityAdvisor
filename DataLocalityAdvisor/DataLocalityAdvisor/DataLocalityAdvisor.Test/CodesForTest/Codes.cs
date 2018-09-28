@@ -20,7 +20,7 @@ public class program
         }
     }
 }
-}";
+";
         
         public const string PropertiesTestString = @"using System.Collections.Generic;
 
@@ -72,7 +72,42 @@ namespace ConsoleApplication1
         };
 
         #endregion
-        
+
+        #region Test3
+
+        public static string[] MultiDoc2 = new[] {
+            @"using System.Collections.Generic;
+namespace ConsoleApplication1
+{
+    public class program
+    {
+        public void main()
+        {
+            List<string> local1;
+            int local2 = 0;
+            test t = new test();
+            test.memberCollection = new List<string>();
+        }
+    }
+}",
+
+            @"using System.Collections.Generic;
+
+namespace ConsoleApplication1
+{
+    public class test
+    {
+        public List<string> memberCollection { get; set; }
+        public void testmethod()
+        {
+            List<string> local1;
+            int local2 = 0;
+        }
+    }
+}"
+        };
+
+        #endregion
 
     }
 }
