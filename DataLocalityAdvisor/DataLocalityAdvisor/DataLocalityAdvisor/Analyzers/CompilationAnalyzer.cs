@@ -39,24 +39,7 @@ namespace DataLocalityAnalyzer
             return returnSymbols;
         }
 
-        public ICollection<ISymbol> GetCollections(Compilation compilation)
-        {
-            IEnumerable<ISymbol> symbols = GetSymbols(compilation);
-            ICollection<ISymbol> returnSymbols = new List<ISymbol>();
-            foreach (ISymbol symbol in symbols)
-            {
-                var model = compilation.GetSemanticModel(symbol.OriginalDefinition.DeclaringSyntaxReferences[0].SyntaxTree);
-                var type = symbol.DeclaringSyntaxReferences[0].GetSyntax().RawKind;
-                if (symbol.Kind == SymbolKind.Property )
-                {
-                    if(((IPropertySymbol) symbol).OriginalDefinition.Type.ContainingNamespace.Name == "Collections")
-                        returnSymbols.Add(symbol);
-                }
 
-                Debug.WriteLine(symbol.ToString());
-            }
-            return returnSymbols;
-        }
 
         private ICollection<ISymbol> GetLocalSymbolsFromMethod(IEnumerable<ISymbol> methods, Compilation compilation)
         {
@@ -70,6 +53,22 @@ namespace DataLocalityAnalyzer
                     .Where(symbol => symbol.Kind == SymbolKind.Local && !returnSymbols.Contains(symbol)));
             }
 
+            return returnSymbols;
+        }
+
+        public ICollection<ISymbol> GetCollections(Compilation compilation)
+        {
+            IEnumerable<ISymbol> symbols = GetSymbols(compilation);
+            List<ISymbol> returnSymbols = new List<ISymbol>();
+            var t = typeof(ILocalSymbol);
+
+            returnSymbols.AddRange(symbols.
+                Where(s => (ILocalSymbol)s.Type.ToString().Contains("System.Collection"))
+                );
+
+            returnSymbols.AddRange(symbols.OfType<IPropertySymbol>().
+                Where(s => s.Type.ToString().Contains("System.Collection"))
+            );
             return returnSymbols;
         }
 
