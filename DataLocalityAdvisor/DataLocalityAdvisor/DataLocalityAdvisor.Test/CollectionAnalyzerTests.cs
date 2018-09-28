@@ -20,7 +20,6 @@ namespace DataLocalityAnalyzer.test
         public void Setup()
         {
             _compilationAnalyzer = new CompilationAnalyzer();
-
         }
 
         [DataRow(Codes.LocalSymbolsTestString,2),
@@ -34,7 +33,7 @@ namespace DataLocalityAnalyzer.test
         }
 
         [TestMethod]
-        public void GetOnlyCollectionSymbolsTest()
+        public void GetSymbolsFromMultipleDocumentsWihtoutDuplicatesTest()
         {
             Compilation compilation = GetProjectCompilation(Codes.MultiDoc);
             var localSymbols = _compilationAnalyzer.GetSymbols(compilation);

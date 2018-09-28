@@ -20,17 +20,18 @@ namespace DataLocalityAnalyzer
         {
             List<ISymbol> returnSymbols = new List<ISymbol>();
 
-            var methods = compilation.GetSymbolsWithName(s => true, SymbolFilter.Member).
+             IEnumerable<ISymbol>  methods = compilation.GetSymbolsWithName(s => true, SymbolFilter.Member).
                 Where(currentSymbol => currentSymbol.Kind == SymbolKind.Method);
             
-            var propertiesSymbols = compilation.GetSymbolsWithName(s => true).Where(currentSymbol =>
+            IEnumerable<ISymbol> propertySymbols = compilation.GetSymbolsWithName(s => true).Where(currentSymbol =>
                 currentSymbol.Kind == SymbolKind.Property ||
                 currentSymbol.Kind == SymbolKind.Field && !returnSymbols.Contains(currentSymbol));
 
             var localSymbols = GetLocalSymbolsFromMethod(methods, compilation).Where(currentSymbol => !returnSymbols.Contains(currentSymbol));
            
             returnSymbols.AddRange(localSymbols);
-            returnSymbols.AddRange(propertiesSymbols );
+            returnSymbols.AddRange(propertySymbols);
+
             return returnSymbols;
         }
 
@@ -47,6 +48,11 @@ namespace DataLocalityAnalyzer
             }
 
             return returnSymbols;
+        }
+
+        public ICollection<ISymbol> GetCollections(IEnumerable<ISymbol> symbols, Compilation compilation)
+        {
+            throw new NotImplementedException();
         }
 
         internal void EndcompilationAction(CompilationAnalysisContext obj)
