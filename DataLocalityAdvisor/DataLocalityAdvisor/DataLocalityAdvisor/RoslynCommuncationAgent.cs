@@ -36,7 +36,7 @@ namespace DataLocalityAdvisor
                     return;
                 CompilationAnalyzer analyzer = new CompilationAnalyzer();
                 compilationContext.RegisterSemanticModelAction(analyzer.SemanticAction);
-                compilationContext.RegisterCompilationEndAction(analyzer.EndcompilationAction);
+                compilationContext.RegisterCompilationEndAction(analyzer.EndCompilationAction);
             });
         }
     }
