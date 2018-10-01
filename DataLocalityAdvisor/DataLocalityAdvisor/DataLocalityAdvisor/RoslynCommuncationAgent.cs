@@ -1,12 +1,21 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Text;
 using DataLocalityAnalyzer;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Emit;
+using Microsoft.CodeAnalysis.FindSymbols;
+using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.CodeAnalysis.Operations;
+using Microsoft.CodeAnalysis.Simplification;
+using Microsoft.CodeAnalysis.Text;
 
 namespace DataLocalityAdvisor
 {
@@ -32,12 +41,14 @@ namespace DataLocalityAdvisor
             context.RegisterCompilationStartAction( compilationContext  =>
             {
                 INamedTypeSymbol collectionsNameSpace = compilationContext.Compilation.GetTypeByMetadataName("System.Collections") ;
+                com
                 if (collectionsNameSpace == null)
                     return;
                 CompilationAnalyzer analyzer = new CompilationAnalyzer();
-                compilationContext.RegisterSemanticModelAction(analyzer.SemanticAction);
                 compilationContext.RegisterCompilationEndAction(analyzer.EndCompilationAction);
             });
         }
-    }
+
+        }
 }
+

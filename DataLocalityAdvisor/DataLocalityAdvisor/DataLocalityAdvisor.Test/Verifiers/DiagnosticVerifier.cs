@@ -266,5 +266,11 @@ namespace TestHelper
             return builder.ToString();
         }
         #endregion
+
+        public  static async System.Threading.Tasks.Task<Compilation> GetProjectCompilationAsync(string[] docs)
+        {
+            var project = DiagnosticVerifier.CreateProject(docs);
+            return await project.GetCompilationAsync();
+        }
     }
 }

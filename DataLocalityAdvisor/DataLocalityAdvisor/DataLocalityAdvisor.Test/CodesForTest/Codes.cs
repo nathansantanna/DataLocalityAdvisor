@@ -77,6 +77,20 @@ namespace ConsoleApplication1
 
         public static string[] MultiDoc2 = new[] {
             @"using System.Collections.Generic;
+
+namespace ConsoleApplication1
+{
+    public class test
+    {
+        public List<string> memberCollection { get; set; }
+        public void testmethod()
+        {
+            List<string> local1 = new List<string>(); 
+            int local2 = 0;
+        }
+    }
+}",
+            @"using System.Collections.Generic;
 namespace ConsoleApplication1
 {
     public class program
@@ -86,25 +100,12 @@ namespace ConsoleApplication1
             List<string> local1;
             int local2 = 0;
             test t = new test();
-            test.memberCollection = new List<string>();
-        }
-    }
-}",
-
-            @"using System.Collections.Generic;
-
-namespace ConsoleApplication1
-{
-    public class test
-    {
-        public List<string> memberCollection { get; set; }
-        public void testmethod()
-        {
-            List<string> local1;
-            int local2 = 0;
+            test.memberCollection.Add(""lororo"");
         }
     }
 }"
+
+           
         };
 
         #endregion
