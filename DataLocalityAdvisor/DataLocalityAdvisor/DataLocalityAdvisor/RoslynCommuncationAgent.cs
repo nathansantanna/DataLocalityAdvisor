@@ -19,6 +19,7 @@ using Microsoft.CodeAnalysis.Text;
 
 namespace DataLocalityAdvisor
 {
+    
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class RoslynCommuncationAgent: DiagnosticAnalyzer
     {
@@ -40,8 +41,8 @@ namespace DataLocalityAdvisor
             context.EnableConcurrentExecution();
             context.RegisterCompilationStartAction( compilationContext  =>
             {
+                
                 INamedTypeSymbol collectionsNameSpace = compilationContext.Compilation.GetTypeByMetadataName("System.Collections") ;
-                com
                 if (collectionsNameSpace == null)
                     return;
                 CompilationAnalyzer analyzer = new CompilationAnalyzer();
@@ -49,6 +50,6 @@ namespace DataLocalityAdvisor
             });
         }
 
-        }
+    }
 }
 

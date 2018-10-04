@@ -9,11 +9,16 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Editing;
 using Microsoft.CodeAnalysis.FindSymbols;
 using Microsoft.CodeAnalysis.Operations;
+using Microsoft.CodeAnalysis.Text;
 
 namespace DataLocalityAnalyzer
 {
     public  class CompilationAnalyzer
     {
+        private static readonly MetadataReference CorlibReference = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
+        private static readonly MetadataReference SystemCoreReference = MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location);
+        private static readonly MetadataReference CSharpSymbolsReference = MetadataReference.CreateFromFile(typeof(CSharpCompilation).Assembly.Location);
+        private static readonly MetadataReference CodeAnalysisReference = MetadataReference.CreateFromFile(typeof(Compilation).Assembly.Location);
         private List<ISymbol> _symbols;
 
         internal void SemanticAction(SemanticModelAnalysisContext semanticModelAnalysisContext)
@@ -21,22 +26,46 @@ namespace DataLocalityAnalyzer
             throw new NotImplementedException();
         }
 
-        internal void EndCompilationAction(CompilationAnalysisContext obj)
+        internal void EndCompilationAction(CompilationAnalysisContext compilation)
         { 
+
             throw new NotImplementedException();
         }
 
-        public ICollection<string> VerifyCollectionsUse(Compilation compilation, ISymbol symbol )
+        public ICollection<string> VerifyCollectionsUse(Compilation compilation, ISymbol symbol)
         {
-            ICollection<string> returnList = new List<string>();
-            //SymbolFinder.FindReferencesAsync(symbol, compilation.SyntaxTrees.ToList()[0].);
-            var teste = "";
-            var att = symbol.GetAttributes();
-            var teste2 = "";
-            var model = compilation.GetSemanticModel(compilation.SyntaxTrees.ToList()[0]);
+            var testete = compilation.ToMetadataReference();
+            var refmea = compilation.GetMetadataReference(compilation.Assembly);
+            var assemblyName = compilation.AssemblyName;
+            var projectName = compilation.AssemblyName;
+            var projectId = ProjectId.CreateNewId( assemblyName);
+            var solution = new AdhocWorkspace().CurrentSolution
+                .AddProject(projectId, projectName, assemblyName, LanguageNames.CSharp);
+                //.AddMetadataReference(projectId, compilation.Assembly.GetMetadata().GetReference())
+                //.AddMetadataReference(projectId, CorlibReference)
+                //.AddMetadataReference(projectId, SystemCoreReference)
+                //.AddMetadataReference(projectId, CSharpSymbolsReference)
+                //.AddMetadataReference(projectId, CodeAnalysisReference);
+            foreach (var tree in compilation.SyntaxTrees)
+            {
+                var newFileName = System.IO.Path.GetFileName(tree.FilePath);
+                var documentId = DocumentId.CreateNewId(projectId, newFileName);
+                solution = solution.AddDocument(documentId, newFileName, tree.GetText());
+            }
             
-            return returnList;
-        }
+            var teste2 = SymbolFinder.FindSimilarSymbols(symbol, compilation);
 
+            //Dictionary<ISymbol, IEnumerable<ReferencedSymbol>> refs =
+            //    new Dictionary<ISymbol, IEnumerable<ReferencedSymbol>>();
+
+            //foreach (var symbb in teste2)
+            //{
+            //    var symrefs = SymbolFinder.FindReferencesAsync(symbb, solution).Result;
+            //    refs.Add(symbb, symrefs);
+            //}
+            
+            int r = 0;
+            return new List<string>();
+        }
     }
 }

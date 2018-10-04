@@ -101,6 +101,10 @@ namespace ConsoleApplication1
             int local2 = 0;
             test t = new test();
             test.memberCollection.Add(""lororo"");
+            foreach (var memberstr in test.memberCollection)
+            {
+                Console.Writeline(memberstr)
+            }   
         }
     }
 }"

@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using TestHelper;
-
 using DataLocalityAdvisor;
 using Microsoft.CodeAnalysis.CSharp;
 
