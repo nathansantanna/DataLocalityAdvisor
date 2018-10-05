@@ -11,33 +11,33 @@ namespace DataLocalityAnalyzer.test
         [DataRow(Codes.LocalSymbolsTestString,2),
         DataRow(Codes.PropertiesTestString,2)]
         [DataTestMethod]
-        public async System.Threading.Tasks.Task GetSymbolsForSimpleCompilationFileAsync(string source,int expected)
+        public void GetSymbolsForSimpleCompilationFile(string source,int expected)
         {
-            Compilation compilation = await DiagnosticVerifier.GetProjectCompilationAsync(new[]{source});
+            Compilation compilation = DiagnosticVerifier.GetProjectCompilationAsync(new[]{source});
             var localSymbols = CollectionFinder.GetSymbols(compilation);
             Assert.AreEqual(localSymbols.Count,2);
         }
 
         [TestMethod]
-        public async System.Threading.Tasks.Task GetSymbolsFromMultipleDocumentsTestAsync()
+        public void GetSymbolsFromMultipleDocumentsTest()
         {
-            Compilation compilation = await DiagnosticVerifier.GetProjectCompilationAsync(Codes.MultiDoc);
+            Compilation compilation = DiagnosticVerifier.GetProjectCompilationAsync(Codes.MultiDoc);
             var localSymbols = CollectionFinder.GetSymbols(compilation);
             Assert.AreEqual(localSymbols.Count,5);
         }
 
         [TestMethod]
-        public async System.Threading.Tasks.Task GetSymbolsFromMultipleDocumentsWithoutDuplicatesTest2Async()
+        public void GetSymbolsFromMultipleDocumentsWithoutDuplicatesTest2()
         {
-            Compilation compilation = await DiagnosticVerifier.GetProjectCompilationAsync(Codes.MultiDoc2);
+            Compilation compilation = DiagnosticVerifier.GetProjectCompilationAsync(Codes.MultiDoc2);
             var localSymbols = CollectionFinder.GetSymbols(compilation);
             Assert.AreEqual(localSymbols.Count,6);
         }
 
         [TestMethod]
-        public async System.Threading.Tasks.Task GetCollectionsSymbolsTestAsync()
+        public void GetCollectionsSymbolsTest()
         {
-            Compilation compilation = await DiagnosticVerifier.GetProjectCompilationAsync(Codes.MultiDoc2);
+            Compilation compilation = DiagnosticVerifier.GetProjectCompilationAsync(Codes.MultiDoc2);
             var collections = CollectionFinder.GetCollections(compilation);
             Assert.AreEqual(collections.Count,3);
         }

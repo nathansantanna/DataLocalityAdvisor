@@ -19,7 +19,7 @@ namespace DataLocalityAdvisor
 
         public sealed override ImmutableArray<string> FixableDiagnosticIds
         {
-            get { return ImmutableArray.Create(RoslynCommuncationAgent.DiagnosticId); }
+            get { return ImmutableArray.Create(ConvertClassToStructAnalyzer.DiagnosticId); }
         }
 
         public sealed override FixAllProvider GetFixAllProvider()

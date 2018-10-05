@@ -7,92 +7,26 @@ using System.Collections.Generic;
 using System.Data;
 using TestHelper;
 using DataLocalityAdvisor;
+using DataLocalityAnalyzer.test.CodesForTest;
 using Microsoft.CodeAnalysis.CSharp;
 
 namespace DataLocalityAdvisor.Test
 {
     [TestClass]
-    public class DiagnosticsTests : CodeFixVerifier
+    public class LoopDiagnosticsTests : CodeFixVerifier
     {
-        #region Props
-        public string source = @"using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Diagnostics;
-
-namespace ConsoleApplication1
-{
-    class Program
-    {   
-        public List<string> test { get; set; }
-         Static void main()
-        {
-            public List<string> test { get; set; }
-        }
-    }
-}";
-        #endregion
-
+        [TestMethod]
         //No diagnostics expected to show up
-        public void FindCollectionsTest()
+        public void SimpleStructToClassDiagnostic()
         {
+
             var expectedDiagnosisLocation = new[]
             {
                 new DiagnosticResultLocation("Test0.cs", 12, 29),
             };
-            var expected = new DiagnosticResult(RoslynCommuncationAgent.Rule,expectedDiagnosisLocation);
+            var expected = new DiagnosticResult(ConvertClassToStructAnalyzer.Rule,expectedDiagnosisLocation);
           
-            VerifyCSharpDiagnostic(source,expected);
-        }
-
-        //Diagnostic and CodeFix both triggered and checked for
-        public void TestMethod2()
-        {
-            var test = @"
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using System.Diagnostics;
-
-    namespace ConsoleApplication1
-    {
-        class TypeName
-        {   
-        }
-    }";
-            var expected = new DiagnosticResult
-            {
-                Id = "DataLocalityAdvisor",
-                Message = String.Format("Type name '{0}' contains lowercase letters", "TypeName"),
-                Severity = DiagnosticSeverity.Warning,
-                Locations =
-                    new[] {
-                            new DiagnosticResultLocation("Test0.cs", 11, 15)
-                        }
-            };
-
-            VerifyCSharpDiagnostic(test, expected);
-
-
-            var fixtest = @"
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using System.Diagnostics;
-
-    namespace ConsoleApplication1
-    {
-        class TYPENAME
-        {   
-        }
-    }";
-            VerifyCSharpFix(test, fixtest);
+            VerifyCSharpDiagnostic(Codes.ClassToStruct,expected);
         }
 
         protected override Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider GetCSharpCodeFixProvider()
@@ -102,7 +36,7 @@ namespace ConsoleApplication1
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
-            return new RoslynCommuncationAgent();
+            return new ConvertClassToStructAnalyzer();
         }
     }
 }

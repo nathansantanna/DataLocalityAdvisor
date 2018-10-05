@@ -19,9 +19,8 @@ using Microsoft.CodeAnalysis.Text;
 
 namespace DataLocalityAdvisor
 {
-    
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class RoslynCommuncationAgent: DiagnosticAnalyzer
+    public class ConvertClassToStructAnalyzer: DiagnosticAnalyzer
     {
         #region Localizable Strings
         public const string DiagnosticId = "DataLocalityAdvisor";
@@ -39,22 +38,13 @@ namespace DataLocalityAdvisor
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
-            context.RegisterCompilationStartAction( compilationContext  =>
-            {
-                
-                INamedTypeSymbol collectionsNameSpace = compilationContext.Compilation.GetTypeByMetadataName("System.Collections") ;
-                if (collectionsNameSpace == null)
-                    return;
-                CompilationAnalyzer analyzer = new CompilationAnalyzer();
-                compilationContext.RegisterCompilationEndAction(analyzer.EndCompilationAction);
-            });
-            context.RegisterOperationAction(OnLoopFound,OperationKind.Loop);
+            context.RegisterSymbolAction(ClassAnalyzer,SymbolKind.NamedType);
         }
-
-        private void OnLoopFound(OperationAnalysisContext operationAnalysisContext)
+        
+        private void ClassAnalyzer(SymbolAnalysisContext symbolAnalysisContext)
         {
-            var loop = (ILoopOperation) operationAnalysisContext.Operation;
-
+            var namedSymbol = (INamedTypeSymbol)symbolAnalysisContext.Symbol;
+            symbolAnalysisContext.
         }
     }
 }
