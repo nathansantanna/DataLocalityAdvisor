@@ -48,8 +48,14 @@ namespace DataLocalityAdvisor
                 CompilationAnalyzer analyzer = new CompilationAnalyzer();
                 compilationContext.RegisterCompilationEndAction(analyzer.EndCompilationAction);
             });
+            context.RegisterOperationAction(OnLoopFound,OperationKind.Loop);
         }
 
+        private void OnLoopFound(OperationAnalysisContext operationAnalysisContext)
+        {
+            var loop = (ILoopOperation) operationAnalysisContext.Operation;
+
+        }
     }
 }
 

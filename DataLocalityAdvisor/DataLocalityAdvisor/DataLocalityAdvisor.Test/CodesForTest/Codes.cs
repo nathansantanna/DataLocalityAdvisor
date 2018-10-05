@@ -114,7 +114,35 @@ namespace ConsoleApplication1
 
         #endregion
 
+        #region LoopTestCode
+
+        
+
+        #endregion
+
     }
 }
 
 
+using System.Collections.Generic;
+
+namespace ConsoleApplication1
+{
+    public class program
+    {
+        struct Particle
+        {
+            int id;
+            private bool isActive;
+            void Render()
+            {
+            }
+
+        }
+        public void main()
+        {
+            List<string> t = new List<string>();
+            
+        }
+    }
+}
