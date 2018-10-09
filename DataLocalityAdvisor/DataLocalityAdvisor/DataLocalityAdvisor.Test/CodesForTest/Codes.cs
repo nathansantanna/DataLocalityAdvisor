@@ -116,24 +116,27 @@ namespace ConsoleApplication1
 
         #region LoopTestCode
 
-        public const string ClassToStruct = @"
+        public const string ClassToStructSimpleClass = @"using System.Collections.Generic;
         namespace ConsoleApplication1
         {
-
-            public class program
-            {
-                List<string> s;
-            
-                public void main()
-                {
-                    s = new List<string>();
-                }
-            }
-
             public class Particle
             {
                 int id;
                 private bool isActive;
+                Particle()
+                {}
+            }
+        }";
+
+        public const string ClassToStructSimpleClassFixed = @"using System.Collections.Generic;
+        namespace ConsoleApplication1
+        {
+            public struct Particle
+            {
+                int id;
+                private bool isActive;
+                Particle()
+                {}
             }
         }";
 

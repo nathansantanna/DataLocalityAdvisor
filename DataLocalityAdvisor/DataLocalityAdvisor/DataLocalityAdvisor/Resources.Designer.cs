@@ -10,7 +10,6 @@
 
 namespace DataLocalityAnalyzer {
     using System;
-    using System.Reflection;
     
     
     /// <summary>
@@ -40,7 +39,7 @@ namespace DataLocalityAnalyzer {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DataLocalityAnalyzer.Resources", typeof(Resources).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DataLocalityAnalyzer.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -62,7 +61,7 @@ namespace DataLocalityAnalyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Arrays are better suited for data locality.
+        ///   Looks up a localized string similar to You can transform this class in a struct and this will improve your data locality dramatically.
         /// </summary>
         internal static string AnalyzerDescription {
             get {
@@ -71,7 +70,7 @@ namespace DataLocalityAnalyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Verify if this collection can be an array.
+        ///   Looks up a localized string similar to You can transform this class in a struct and this will improve your data locality dramatically.
         /// </summary>
         internal static string AnalyzerMessageFormat {
             get {
@@ -80,7 +79,7 @@ namespace DataLocalityAnalyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Collection can be turned on array .
+        ///   Looks up a localized string similar to Transform into struct.
         /// </summary>
         internal static string AnalyzerTitle {
             get {
@@ -89,7 +88,7 @@ namespace DataLocalityAnalyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Transform into array.
+        ///   Looks up a localized string similar to Transform into a struct.
         /// </summary>
         internal static string LampTitle {
             get {

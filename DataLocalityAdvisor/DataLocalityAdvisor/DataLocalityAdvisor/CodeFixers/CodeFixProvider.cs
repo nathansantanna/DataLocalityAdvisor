@@ -9,6 +9,7 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Editing;
 using Microsoft.CodeAnalysis.Rename;
 
 namespace DataLocalityAdvisor
@@ -33,26 +34,27 @@ namespace DataLocalityAdvisor
             var diagnostic = context.Diagnostics.First();
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
-            var declaration = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<TypeDeclarationSyntax>().First();
+            var declaration = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<ClassDeclarationSyntax>().First();
 
             context.RegisterCodeFix(
                 CodeAction.Create(
                     Resources.LampTitle,
-                    c => MakeUppercaseAsync(context.Document, declaration, c), 
+                    c => TransformClassInStruct(context.Document, declaration, c), 
                     Resources.LampTitle ),
                 diagnostic);
         }
 
-        private async Task<Solution> MakeUppercaseAsync(Document document, TypeDeclarationSyntax typeDecl, CancellationToken cancellationToken)
+        private async Task<Solution> TransformClassInStruct(Document document, ClassDeclarationSyntax classDeclaration, CancellationToken cancellationToken)
         {
-            var identifierToken = typeDecl.Identifier;
-            var newName = identifierToken.Text.ToUpperInvariant();
-
+            var identifierToken = classDeclaration.Keyword;
+            var newName = "struct";
+            StructDeclarationSyntax s = classDeclaration.
             var semanticModel = await document.GetSemanticModelAsync(cancellationToken);
-            var typeSymbol = semanticModel.GetDeclaredSymbol(typeDecl, cancellationToken);
+            var typeSymbol = semanticModel.GetDeclaredSymbol(classDeclaration, cancellationToken);
 
             var originalSolution = document.Project.Solution;
             var optionSet = originalSolution.Workspace.Options;
+
             var newSolution = await Renamer.RenameSymbolAsync(document.Project.Solution, typeSymbol, newName, optionSet, cancellationToken).ConfigureAwait(false);
 
             return newSolution;

@@ -267,7 +267,7 @@ namespace TestHelper
         }
         #endregion
 
-        public static Compilation GetProjectCompilationAsync(string[] docs)
+        public static Compilation GetProjectCompilation(string[] docs)
         {
             var project = DiagnosticVerifier.CreateProject(docs);
             return project.GetCompilationAsync().Result;
