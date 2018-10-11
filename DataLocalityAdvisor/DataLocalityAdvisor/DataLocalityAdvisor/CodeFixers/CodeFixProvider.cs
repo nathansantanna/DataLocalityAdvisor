@@ -19,7 +19,6 @@ namespace DataLocalityAdvisor
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(CodeFixProvider)), Shared]
     public class CodeFixProvider : Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider
     {
-
         public sealed override ImmutableArray<string> FixableDiagnosticIds
         {
             get { return ImmutableArray.Create(ConvertClassToStructAnalyzer.DiagnosticId); }
@@ -88,9 +87,7 @@ namespace DataLocalityAdvisor
                         break;
                 }
             }
-
             return newmembers;
         }
     }
 }
-

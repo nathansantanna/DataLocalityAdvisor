@@ -38,7 +38,6 @@ public class program
 
 }";
         #endregion
-
         #region Test2
 
         public static string[] MultiDoc = new[] {
@@ -72,7 +71,6 @@ namespace ConsoleApplication1
         };
 
         #endregion
-
         #region Test3
 
         public static string[] MultiDoc2 = new[] {
@@ -113,8 +111,7 @@ namespace ConsoleApplication1
         };
 
         #endregion
-
-        #region LoopTestCode
+        #region SimpleStructTestCode
 
         public const string ClassToStructSimpleClass = @"using System.Collections.Generic;
 namespace ConsoleApplication1
@@ -123,8 +120,6 @@ namespace ConsoleApplication1
     {
         int id;
         private bool isActive;
-        Particle()
-        {}
     }
 }";
 
@@ -140,6 +135,77 @@ namespace ConsoleApplication1
 
 
         #endregion
+        #region ClassTostructWithMethod
+        public const string ClassWithMethod = @"using System.Collections.Generic;
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        int id;
+        private bool isActive;
 
+        void Main()
+        {
+            Console.Write(""Should not have Diagnostic"");
+        }
+}
+}";
+        #endregion
+        #region ClassTostructWithMethod
+        public const string ClassWithCollection = @"using System.Collections.Generic;
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        int id;
+        private bool isActive;
+        public List<string> teste;
+}
+}";
+        #endregion
+        #region ClassWithNonBasicMember
+        public const string ClassWithNonBasicMember = @"using System.Collections.Generic;
+namespace ConsoleApplication1
+{
+    struct teste
+    {
+        string name;
+        List<string> collectionMember;
+    }
+    public class Program
+    {
+        int id;
+        private bool isActive;
+        teste customMember;
+    }
+}";
+        #endregion
+        #region ClassWithNonBasicMember
+        public const string SimpleStruct = @"using System.Collections.Generic;
+namespace ConsoleApplication1
+{
+    struct teste
+    {
+        string name;
+    }
+}";
+        #endregion
+        #region ClassWithNonBasicMember
+        public const string ClassWithInheritance = @"using System.Collections.Generic;
+namespace ConsoleApplication1
+{
+    class ParentClass
+    {
+    }
+
+    class Teste : ParentClass
+    {
+        string name;
+    }
+}";
+        #endregion
     }
 }
+
+
+

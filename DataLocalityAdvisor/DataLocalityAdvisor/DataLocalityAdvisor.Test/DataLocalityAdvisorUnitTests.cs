@@ -17,10 +17,14 @@ namespace DataLocalityAdvisor.Test
     [TestClass]
     public class StructToClassTests : CodeFixVerifier
     {
+        private void SetupDiagnosticTest()
+        {
+
+        }
         [TestMethod]
         public void SimpleStructToClassDiagnostic()
         {
-            var expectedLocation = GetDiagnosticPosition(new[] {Codes.ClassToStructSimpleClass});
+            var expectedLocation = GetDiagnosticPosition(new[] {Codes.ClassToStructSimpleClass}, "Particle");
 
             var expectedDiagnosisLocation = new[]
             {
@@ -28,8 +32,6 @@ namespace DataLocalityAdvisor.Test
             };
             var expected = new DiagnosticResult(ConvertClassToStructAnalyzer.Rule,expectedDiagnosisLocation);
             VerifyCSharpDiagnostic(Codes.ClassToStructSimpleClass,expected);
-
-            VerifyCSharpFix(Codes.ClassToStructSimpleClass,Codes.ClassToStructSimpleClassFixed);
         }
 
         [TestMethod]
@@ -38,14 +40,42 @@ namespace DataLocalityAdvisor.Test
             VerifyCSharpFix(Codes.ClassToStructSimpleClass,Codes.ClassToStructSimpleClassFixed);
         }
 
-        public void DontSendDiagnosticIfContainsCollection()
+        [TestMethod]
+        public void DontSendDiagnosticClassWithCollection()
         {
+            VerifyCSharpDiagnostic(Codes.ClassWithCollection);
         }
 
-        public void DontSendDiagnosticIfNonConstructorMethods()
+        [TestMethod]
+        public void DontSendDiagnosticClassWithMethod()
         {
+            VerifyCSharpDiagnostic(Codes.ClassWithMethod);
         }
 
+        [TestMethod]
+        public void DontSendDiagnosticClassWithCustomMember()
+        {
+            VerifyCSharpDiagnostic(Codes.ClassWithNonBasicMember);
+        }
+
+        [TestMethod]
+        public void DontSendDiagnosticToStructs()
+        {
+            VerifyCSharpDiagnostic(Codes.SimpleStruct);
+        }
+
+        [TestMethod]
+        public void DontSendDiagnosticToClassesWithinheritance()
+        {
+            var expectedLocation = GetDiagnosticPosition(new[] {Codes.ClassWithInheritance}, "ParentClass");
+
+            var expectedDiagnosisLocation = new[]
+            {
+                new DiagnosticResultLocation("Test0.cs",expectedLocation.Line + 1,expectedLocation.Character + 1),
+            };
+            var expected = new DiagnosticResult(ConvertClassToStructAnalyzer.Rule,expectedDiagnosisLocation);
+            VerifyCSharpDiagnostic(Codes.ClassWithInheritance,expected);
+        }
 
         protected override Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider GetCSharpCodeFixProvider()
         {
@@ -57,9 +87,9 @@ namespace DataLocalityAdvisor.Test
             return new ConvertClassToStructAnalyzer();
         }
 
-        protected LinePosition GetDiagnosticPosition(string[] sources)
+        protected LinePosition GetDiagnosticPosition(string[] sources, string symbolName)
         {
-           return GetProjectCompilation(sources).GetSymbolsWithName("Particle").First().Locations[0].GetMappedLineSpan().Span.Start;
+           return GetProjectCompilation(sources).GetSymbolsWithName(symbolName).First().Locations[0].GetMappedLineSpan().Span.Start;
         }
     }
 }
