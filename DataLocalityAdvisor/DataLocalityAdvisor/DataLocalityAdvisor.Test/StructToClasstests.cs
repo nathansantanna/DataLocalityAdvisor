@@ -17,10 +17,7 @@ namespace DataLocalityAdvisor.Test
     [TestClass]
     public class StructToClassTests : CodeFixVerifier
     {
-        private void SetupDiagnosticTest()
-        {
-
-        }
+        
         [TestMethod]
         public void SimpleStructToClassDiagnostic()
         {
@@ -79,7 +76,7 @@ namespace DataLocalityAdvisor.Test
 
         protected override Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider GetCSharpCodeFixProvider()
         {
-            return new CodeFixProvider();
+            return new CodeFixStructToClass();
         }
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()

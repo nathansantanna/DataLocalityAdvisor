@@ -16,8 +16,8 @@ using Microsoft.CodeAnalysis.Rename;
 
 namespace DataLocalityAdvisor
 {
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(CodeFixProvider)), Shared]
-    public class CodeFixProvider : Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(CodeFixStructToClass)), Shared]
+    public class CodeFixStructToClass : Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider
     {
         public sealed override ImmutableArray<string> FixableDiagnosticIds
         {
