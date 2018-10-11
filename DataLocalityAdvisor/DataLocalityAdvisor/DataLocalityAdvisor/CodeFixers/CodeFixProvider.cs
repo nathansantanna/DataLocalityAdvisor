@@ -36,7 +36,7 @@ namespace DataLocalityAdvisor
             var diagnostic = context.Diagnostics.First();
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
-            var declaration = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<ClassDeclarationSyntax>().First();
+            var declaration = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<TypeDeclarationSyntax>().First();
 
             context.RegisterCodeFix(
                 CodeAction.Create(
@@ -46,29 +46,50 @@ namespace DataLocalityAdvisor
                 diagnostic);
         }
 
-        private async Task<Solution> TransformClassInStruct(Document document, ClassDeclarationSyntax classDeclaration, CancellationToken cancellationToken)
+        private async Task<Document> TransformClassInStruct(Document document, TypeDeclarationSyntax classDeclaration, CancellationToken cancellationToken)
         {
-            //var identifierToken = classDeclaration.
-            // classDeclaration.   
-            SyntaxToken structToken = SyntaxFactory.Token(SyntaxKind.StructKeyword);
-            SyntaxToken classToken = SyntaxFactory.Token(SyntaxKind.ClassKeyword);
-            SyntaxToken firstToken = classDeclaration.GetFirstToken();
-            ClassDeclarationSyntax trimmedLocal = classDeclaration.ReplaceToken(
-                firstToken, firstToken.WithLeadingTrivia(SyntaxTriviaList.Empty));
-            SyntaxTokenList newModifiers = trimmedLocal.Modifiers.Insert(0, structToken);
-            newModifiers = newModifiers.Remove(classToken);
-            //StructDeclarationSyntax newclass = trimmedLocal.WithModifiers(newModifiers);
-            var newRoot = document.GetSyntaxRootAsync(cancellationToken).Result.FindNode(classDeclaration.)//.ReplaceToken(classToken, structToken);
+            var newmembers = GetOnlyStructValidMembers(classDeclaration.Members);
+            var structdec = ConvertClassToStructDeclaration(classDeclaration as ClassDeclarationSyntax)
+                .WithMembers(newmembers)
+                .WithAdditionalAnnotations(Formatter.Annotation);
 
-            var semanticModel = await document.GetSemanticModelAsync(cancellationToken);
-            var typeSymbol = semanticModel.GetDeclaredSymbol(classDeclaration, cancellationToken);
-
-            var originalSolution = document.Project.Solution;
-            var optionSet = originalSolution.Workspace.Options;
+            var root = document.GetSyntaxRootAsync(cancellationToken).Result;
+            var newdoc = root.ReplaceNode(classDeclaration,structdec);
             
-            //var newSolution = await Renamer.RenameSymbolAsync(document.Project.Solution, typeSymbol, newName, optionSet, cancellationToken).ConfigureAwait(false);
+            return document.WithSyntaxRoot(newdoc);
+        }
 
-            return document.Project.Solution;
+        private StructDeclarationSyntax ConvertClassToStructDeclaration(ClassDeclarationSyntax classDeclaration)
+        {
+            var structdec = SyntaxFactory.StructDeclaration(classDeclaration.Identifier)
+                .WithModifiers(classDeclaration.Modifiers)
+                .WithAttributeLists(classDeclaration.AttributeLists)
+                .WithLeadingTrivia(classDeclaration.GetLeadingTrivia())
+                .WithTrailingTrivia(classDeclaration.GetTrailingTrivia())
+                .WithTriviaFrom(classDeclaration);
+            return structdec;
+        }
+
+        private SyntaxList<MemberDeclarationSyntax> GetOnlyStructValidMembers(SyntaxList<MemberDeclarationSyntax> currentMembers)
+        {
+            var newmembers = new SyntaxList<MemberDeclarationSyntax>();
+            foreach (var member in currentMembers)
+            {
+                switch (member.Kind())
+                {
+                    case SyntaxKind.FieldDeclaration:
+                    case SyntaxKind.PropertyDeclaration:
+                        newmembers = newmembers.Add(member);
+                        break;
+
+                    case SyntaxKind.ConstructorDeclaration:
+                        if(((ConstructorDeclarationSyntax)member).ParameterList.Parameters.Count > 0)
+                            newmembers = newmembers.Add(member);
+                        break;
+                }
+            }
+
+            return newmembers;
         }
     }
 }

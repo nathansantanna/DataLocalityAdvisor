@@ -15,7 +15,7 @@ using Microsoft.CodeAnalysis.Text;
 namespace DataLocalityAdvisor.Test
 {
     [TestClass]
-    public class LoopDiagnosticsTests : CodeFixVerifier
+    public class StructToClassTests : CodeFixVerifier
     {
         [TestMethod]
         public void SimpleStructToClassDiagnostic()
