@@ -204,8 +204,28 @@ namespace ConsoleApplication1
     }
 }";
         #endregion
+        #region ListOnAMethod
+        public const string ListOnAMethod = @"using System;
+using System.Collections.Generic;
+namespace ConsoleApplication1
+{
+    class Program
+    {
+        public static void main()
+        {
+            List<string> teste = new List<string>();
+            teste.Add(""das"");
+            teste.Add(""sda"");
+            foreach (var member in teste)
+            {
+                Console.WriteLine(member);
+            }
+            
+        }
+    }
+}";
+        #endregion
+
     }
 }
-
-
 

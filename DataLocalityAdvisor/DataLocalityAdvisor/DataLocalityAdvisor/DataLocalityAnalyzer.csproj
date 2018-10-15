@@ -38,7 +38,7 @@
     <Compile Update="CodeFixers\CodeFixArrayConversion.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Analyzers\ConvertToArraAnalyzer.cs">
+    <Compile Update="Analyzers\ConvertToArrayAnalyzer.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Resources.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Resources.resx" />
