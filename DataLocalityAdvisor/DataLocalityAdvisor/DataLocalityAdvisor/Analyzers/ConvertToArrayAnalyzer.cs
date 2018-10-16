@@ -46,14 +46,33 @@ namespace DataLocalityAnalyzer
                     break;
                 case LoopKind.ForEach:
                     var loop = (IForEachLoopOperation) opert;
-                    if (loop.Collection.Children.ToList()[0].Kind == OperationKind.LocalReference)
+                    if (loop.Collection.Type.ToString().Contains("System.Collections"))
                     {
-                        var col  = (ILocalReferenceOperation) loop.Collection.Children.ToList()[0];
-                        operationAnalysisContext.ReportDiagnostic(Diagnostic.Create(Rule, col.Local.Locations[0]));
+                        var collection = (IdentifierNameSyntax)loop.Collection.Syntax;
+                        var tree = operationAnalysisContext.Operation.Syntax.SyntaxTree;
+                        var MethodBlock = operationAnalysisContext.ContainingSymbol.DeclaringSyntaxReferences[0].GetSyntax().ChildNodes().
+                            OfType<BlockSyntax>().First();
+                        var expresionStatements = MethodBlock.ChildNodes().OfType<ExpressionStatementSyntax>();
+                        var nodesWithCollectionMethods =    .Where(
+                            syntax => syntax.Expression.ChildNodes().OfType<IdentifierNameSyntax>().
+                                Any(nameSyntax => nameSyntax.Identifier == collection.Identifier));
+                        //foreach (var node in expresionStatements)
+                        //{
+                        //    if (node.ChildNodes().OfType<IdentifierNameSyntax>().Where((nameSyntax, i1) =>
+                        //            nameSyntax.Identifier == collection.Identifier).Any())
+                        //        return;
+                        //}
+                            //Where((syntax, i) => syntax.ChildNodes().OfType<IdentifierNameSyntax>().
+                            //Where((nameSyntax, i1) => nameSyntax.Identifier == collection.Identifier));
+                        //var nodesWithCollection = Nodes.OfType<MemberAccessExpressionSyntax>()
+                        //    .Where(node => node.Contains(collection));
+                        int tt = 0;
                     }
+
                     break;
             }
            
         }
+       
     }
 }

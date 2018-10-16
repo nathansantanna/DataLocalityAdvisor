@@ -4,6 +4,7 @@ using DataLocalityAdvisor;
 using DataLocalityAnalyzer.test.CodesForTest;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -41,12 +42,20 @@ namespace DataLocalityAnalyzer.test
         protected LinePosition GetDiagnosticPosition(string[] sources, string symbolName)
         {
             var compilation = GetProjectCompilation(sources);
-            var symbols = compilation.GetSymbolsWithName(s => true).ToList()[0].s
-            return LinePosition.Zero;
-            //var symbols = GetProjectCompilation(sources).symbolName, SymbolFilter.All);//.First().Locations[0].GetMappedLineSpan().Span.Start;
-            //var local= symbols.ToList()[0].Locations[0].GetMappedLineSpan().Span.Start;;
-            //return local;
-            //return GetProjectCompilation(sources).GetSymbolsWithName(symbolName).First().Locations[0].GetMappedLineSpan().Span.Start;
+            VariableDeclarationSyntax localvar;
+            foreach (var tree in compilation.SyntaxTrees)
+            {
+                var model = compilation.GetSemanticModel(tree);
+                var localDeclaration =
+                    tree.GetRoot().DescendantNodesAndSelf().OfType<VariableDeclarationSyntax>().
+                        Where(syntax => syntax.Variables[0].Identifier.Text ==  symbolName);
+                if (localDeclaration.Any())
+                {
+                    localvar = localDeclaration.ToArray()[0];
+                    return localvar.GetLocation().GetMappedLineSpan().Span.Start;
+                }
+            }
+            return LinePosition.Zero;            
         }
     }
 
