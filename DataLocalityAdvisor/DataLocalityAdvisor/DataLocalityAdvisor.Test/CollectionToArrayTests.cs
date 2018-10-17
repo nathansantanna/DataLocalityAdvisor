@@ -29,6 +29,19 @@ namespace DataLocalityAnalyzer.test
             VerifyCSharpDiagnostic(Codes.ListOnAMethod, expected);
         }
 
+        [TestMethod]
+        public void FindCollectionInForLoop()
+        {
+            var expectedLocation = GetDiagnosticPosition(new[] { Codes.findCollectionOnAForLoop }, "teste");
+
+            var expectedDiagnosisLocation = new[]
+            {
+                new DiagnosticResultLocation("Test0.cs",expectedLocation.Line + 1,expectedLocation.Character + 1),
+            };
+            var expected = new DiagnosticResult(ConvertToArrayAnalyzer.Rule, expectedDiagnosisLocation);
+            VerifyCSharpDiagnostic(Codes.findCollectionOnAForLoop, expected);
+        }
+
         protected override Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider GetCSharpCodeFixProvider()
         {
             return new CodeFixArrayConversion();

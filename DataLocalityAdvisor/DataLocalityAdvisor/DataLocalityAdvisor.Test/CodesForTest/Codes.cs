@@ -225,9 +225,9 @@ namespace ConsoleApplication1
     }
 }";
         #endregion
-
-    }
-}
+        #region ListOnAMethod
+        public const string findCollectionOnAForLoop = @"using System;
+using System.Collections.Generic;
 namespace ConsoleApplication1
 {
     class Program
@@ -235,13 +235,18 @@ namespace ConsoleApplication1
         public static void main()
         {
             List<string> teste = new List<string>();
-            teste.Add("das");
-            teste.Add("sda");
-            foreach (var member in teste)
+            teste.Add(""das"");
+            teste.Add(""sda"");
+            for (int i = 0; i < teste.Count; i++)
             {
-                Console.WriteLine(member);
+                Console.WriteLine(teste[i]);
             }
             
         }
     }
+}";
+        #endregion
+
+    }
 }
+

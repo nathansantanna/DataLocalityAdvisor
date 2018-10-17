@@ -13,7 +13,6 @@ using Microsoft.CodeAnalysis.Editing;
 using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.CodeAnalysis.Rename;
 
-
 namespace DataLocalityAdvisor
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(CodeFixStructToClass)), Shared]
