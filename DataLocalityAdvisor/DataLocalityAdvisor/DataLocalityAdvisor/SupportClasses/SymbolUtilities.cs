@@ -1,9 +1,19 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Linq;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace DataLocalityAnalyzer.SupportClasses
 {
     internal static class SymbolUtilities
     {
+        private static Location FindCollectionDeclarationLocation(IdentifierNameSyntax collection)
+        {
+            var root = collection.SyntaxTree.GetRoot();
+            var collectionSymbol = root.DescendantNodesAndSelf().OfType<VariableDeclarationSyntax>()
+                .FirstOrDefault(syntax => syntax.Variables[0].Identifier.Text == collection.Identifier.Text);
+            return collectionSymbol?.GetLocation();
+        }
+
         public static bool CanBeStruct(INamedTypeSymbol symbol)
         {
             if (!IsNamedSymbolValidForConversion(symbol))

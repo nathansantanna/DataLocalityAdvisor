@@ -42,6 +42,19 @@ namespace DataLocalityAnalyzer.test
             VerifyCSharpDiagnostic(Codes.findCollectionOnAForLoop, expected);
         }
 
+        public void FindCollectionInCascadeForLoop()
+        {
+            var expectedLocation = GetDiagnosticPosition(new[] { Codes.findCollectionOnAForLoop }, "teste");
+
+            var expectedDiagnosisLocation = new[]
+            {
+                new DiagnosticResultLocation("Test0.cs",expectedLocation.Line + 1,expectedLocation.Character + 1),
+            };
+            var expected = new DiagnosticResult(ConvertToArrayAnalyzer.Rule, expectedDiagnosisLocation);
+            VerifyCSharpDiagnostic(Codes.findCollectionOnAForLoop, expected);
+        }
+
+
         protected override Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider GetCSharpCodeFixProvider()
         {
             return new CodeFixArrayConversion();
@@ -58,7 +71,6 @@ namespace DataLocalityAnalyzer.test
             VariableDeclarationSyntax localvar;
             foreach (var tree in compilation.SyntaxTrees)
             {
-                var model = compilation.GetSemanticModel(tree);
                 var localDeclaration =
                     tree.GetRoot().DescendantNodesAndSelf().OfType<VariableDeclarationSyntax>().
                         Where(syntax => syntax.Variables[0].Identifier.Text ==  symbolName);
@@ -71,5 +83,4 @@ namespace DataLocalityAnalyzer.test
             return LinePosition.Zero;            
         }
     }
-
 }
