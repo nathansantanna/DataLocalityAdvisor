@@ -23,7 +23,7 @@ namespace DataLocalityAnalyzer
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
 
-        public override void Initialize(AnalysisContext context)
+        public override void Initialize(AnalysisContext context) 
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.RegisterOperationAction(Operaction, OperationKind.Loop);
