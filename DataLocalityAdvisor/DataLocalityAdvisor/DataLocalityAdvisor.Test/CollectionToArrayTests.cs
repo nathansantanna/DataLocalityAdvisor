@@ -68,15 +68,16 @@ namespace DataLocalityAnalyzer.test
         protected LinePosition GetDiagnosticPosition(string[] sources, string symbolName)
         {
             var compilation = GetProjectCompilation(sources);
-            VariableDeclarationSyntax localvar;
+            VariableDeclaratorSyntax localvar;
             foreach (var tree in compilation.SyntaxTrees)
             {
                 var localDeclaration =
                     tree.GetRoot().DescendantNodesAndSelf().OfType<VariableDeclarationSyntax>().
                         Where(syntax => syntax.Variables[0].Identifier.Text ==  symbolName);
+                
                 if (localDeclaration.Any())
                 {
-                    localvar = localDeclaration.ToArray()[0];
+                    localvar = localDeclaration.ToArray()[0].Variables[0];
                     return localvar.GetLocation().GetMappedLineSpan().Span.Start;
                 }
             }

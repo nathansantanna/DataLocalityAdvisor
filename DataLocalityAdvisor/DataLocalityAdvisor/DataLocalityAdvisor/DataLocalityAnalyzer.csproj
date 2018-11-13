@@ -31,6 +31,9 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="2.9.0" PrivateAssets="all" />
     <PackageReference Include="Microsoft.VisualStudio.SDK.Analyzers" Version="15.8.36" />
+    <Reference Include="System.Activities">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Activities.dll</HintPath>
+    </Reference>
     <PackageReference Update="NETStandard.Library" PrivateAssets="all" />
   </ItemGroup>
 

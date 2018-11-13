@@ -26,72 +26,82 @@ namespace DataLocalityAnalyzer
         public override void Initialize(AnalysisContext context) 
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
-            context.RegisterOperationAction(Operaction, OperationKind.Loop);
+            context.RegisterOperationAction(OnLoopOperation, OperationKind.Loop);
         }
 
-        private void Operaction(OperationAnalysisContext operationAnalysisContext)
+        private void OnLoopOperation(OperationAnalysisContext operationAnalysisContext)
         {
-            var collections = FindLoopCollections(operationAnalysisContext);
-            var methodBody = GetLoopParentMethod((ILoopOperation)operationAnalysisContext.Operation);
-            if (methodBody == null) return;
+            var methodBody = GetParentMethod(operationAnalysisContext);
+            if (methodBody == null)
+                return;
+
+            var collections = FindLocalCollectionsAccessedOnLoop(operationAnalysisContext,methodBody);
             
             foreach (var collection in collections)
             {
-                if (!CanBeusedAsArray(operationAnalysisContext, collection))
+                if (!CanBeusedAsArray(operationAnalysisContext, collection,methodBody))
                     return;
-                
+
                 operationAnalysisContext.ReportDiagnostic(Diagnostic.Create(Rule, collection.Locations[0]));
             }
         }
 
-        private IEnumerable<ILocalSymbol> FindLoopCollections(OperationAnalysisContext operationAnalysisContext,  IMethodBodyOperation methodBody)
+        private IEnumerable<ILocalSymbol> FindLocalCollectionsAccessedOnLoop(OperationAnalysisContext operationAnalysisContext,  IMethodBodyOperation methodBody)
         {
-            var operation = (ILoopOperation)operationAnalysisContext.Operation;
-
-            var localDecUsedOnLoop = operation.Syntax.Parent.DescendantNodesAndSelf().OfType<VariableDeclarationSyntax>().Where(node => node.Kind() == SyntaxKind.VariableDeclaration
-                                                                           && node.Parent.Kind() == SyntaxKind.LocalDeclarationStatement
-                                                                           && node.Variables.Count > 0);
-            var localsymbols =
+            var localCollections =
                 methodBody.BlockBody.Locals.Where(symbol => symbol.Type.ToString().Contains("System.Collections"));
-            List<ILocalSymbol> result = new List<ILocalSymbol>();
-            foreach (var dec in localsymbols)
+            var symbolsAccessedOnLoop = operationAnalysisContext.Operation.Syntax.DescendantNodesAndSelf()
+                .OfType<ElementAccessExpressionSyntax>();
+            List<ILocalSymbol> returnList = new List<ILocalSymbol>();
+            foreach (ElementAccessExpressionSyntax accessExpressionSyntax in symbolsAccessedOnLoop)
             {
-                if(
+               var idenfier = accessExpressionSyntax.DescendantNodesAndSelf().First(node => node.Kind() == SyntaxKind.IdentifierName);
+               var tt =  localCollections.Where(symbol => symbol.Name == idenfier.ToString());
+                returnList.AddRange(tt);
             }
 
-                                                                           //localSymbolsAccessedOnOperation.Where(node => node.Variables.Contains(symbol.DeclaringSyntaxReferences[0].GetSyntax())))
-                                                                                                                       //localSymbolsAccessedOnOperation.Variables.Contains(symbol.DeclaringSyntaxReferences.ToList()[0].GetSyntax())));
-
-            return localsymbols;
+            return returnList;
         }
 
-        private bool CanBeusedAsArray(OperationAnalysisContext operationAnalysisContext, ILocalSymbol collection)
+        private IMethodBodyOperation GetParentMethod(OperationAnalysisContext operationContext)
         {
-            var methodBlock = operationAnalysisContext.ContainingSymbol.DeclaringSyntaxReferences[0].GetSyntax().ChildNodes().
-                OfType<BlockSyntax>().First();
+            var oper  = operationContext.Operation.Parent;
+            int count = 0;
 
-            var expresionStatements = methodBlock.ChildNodes().OfType<ExpressionStatementSyntax>();
-            foreach (var expresionStatement in expresionStatements)
+            while (oper.Kind != OperationKind.IsType || count < 50)
             {
-                //if (expresionStatement.Expression.ChildTokens()
-                //    .OfType<IdentifierNameSyntax>();//.Any(syntax => syntax.Identifier == collection.Identifier))
+                if (oper.Kind == OperationKind.MethodBodyOperation)
+                    return (IMethodBodyOperation)oper;
+                    
+                oper = oper.Parent;
+                count++;
+            }
+
+            return null;
+        }
+
+        private bool CanBeusedAsArray(OperationAnalysisContext operationAnalysisContext, ILocalSymbol collection, IMethodBodyOperation methodBody)
+        {
+            var accesses = methodBody.Syntax.DescendantNodesAndSelf().OfType<IdentifierNameSyntax>()
+                .Where(syntax => syntax.Identifier.ToString() == collection.Name);
+
+            foreach (var identifierNameSyntax in accesses)
+            {
+                var parent = identifierNameSyntax.Parent;
+                if (parent.Kind() != SyntaxKind.ElementAccessExpression &&
+                    parent.Kind() != SyntaxKind.VariableDeclarator &&
+                    parent.Kind() != SyntaxKind.SimpleMemberAccessExpression)
                     return false;
+
+                if (parent.Kind() == SyntaxKind.SimpleMemberAccessExpression)
+                {
+                    var memberAccessed = ((MemberAccessExpressionSyntax) parent).Name.ToString();
+                    if (memberAccessed != "Length" && memberAccessed != "Count")
+                        return false;
+                }
             }
 
             return true;
-        }
-
-        private IMethodBodyOperation GetLoopParentMethod(ILoopOperation operation)
-        {
-            var methodOperation = operation.Parent;
-            while (methodOperation != null)
-            {
-                if (methodOperation.Kind == OperationKind.MethodBodyOperation)
-                    return methodOperation as IMethodBodyOperation;
-                    
-                methodOperation = methodOperation.Parent;
-            }
-            return null;
         }
     }
 }
@@ -120,4 +130,16 @@ namespace DataLocalityAnalyzer
 //foreach (var accessExpression in elementsAcessed)
 //{
 //    collections.AddRange(accessExpression.DescendantNodesAndSelf().OfType<IdentifierNameSyntax>());
+//}
+
+
+//var methodBlock = operationAnalysisContext.ContainingSymbol.DeclaringSyntaxReferences[0].GetSyntax().ChildNodes().
+//    OfType<BlockSyntax>().First();
+
+//var expresionStatements = methodBlock.ChildNodes().OfType<ExpressionStatementSyntax>();
+//foreach (var expresionStatement in expresionStatements)
+//{
+//    //if (expresionStatement.Expression.ChildTokens()
+//    //    .OfType<IdentifierNameSyntax>();//.Any(syntax => syntax.Identifier == collection.Identifier))
+//        return false;
 //}

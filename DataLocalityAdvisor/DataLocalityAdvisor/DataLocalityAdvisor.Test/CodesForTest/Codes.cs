@@ -213,9 +213,7 @@ namespace ConsoleApplication1
     {
         public static void main()
         {
-            List<string> teste = new List<string>();
-            teste.Add(""das"");
-            teste.Add(""sda"");
+            List<string> teste = new List<string>{""das"", ""sda""};;
             foreach (var member in teste)
             {
                 Console.WriteLine(member);
@@ -235,8 +233,6 @@ namespace ConsoleApplication1
         public static void main()
         {
             List<string> teste = new List<string>();
-            teste.Add(""das"");
-            teste.Add(""sda"");
             for (int i = 0; i < teste.Count; i++)
             {
                 Console.WriteLine(teste[i]);
@@ -255,9 +251,10 @@ namespace ConsoleApplication1
     {
         public static void main()
         {
-            List<string> teste = new List<string>();
-            teste.Add("das");
-            teste.Add("sda");
+            
+            
+            List<string> teste = new List<string> {"das", "sda"};
+            teste.Remove("das");
             for (int i = 0; i < teste.Count; i++)
             {
                 Console.WriteLine(teste[i]);

@@ -12,7 +12,7 @@ using DataLocalityAnalyzer.test.CodesForTest;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
 
-namespace DataLocalityAdvisor.Test
+namespace DataLocalityAnalyzer.Test
 {
     [TestClass]
     public class StructToClassTests : CodeFixVerifier
