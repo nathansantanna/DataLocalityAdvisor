@@ -204,8 +204,8 @@ namespace ConsoleApplication1
     }
 }";
         #endregion
-        #region ListOnAMethod
-        public const string ListOnAMethod = @"using System;
+        #region ListOnAForEach
+        public const string ListOnAForEach = @"using System;
 using System.Collections.Generic;
 namespace ConsoleApplication1
 {
@@ -213,7 +213,7 @@ namespace ConsoleApplication1
     {
         public static void main()
         {
-            List<string> teste = new List<string>{""das"", ""sda""};;
+            List<string> teste = new List<string>{""das"", ""sda""};
             foreach (var member in teste)
             {
                 Console.WriteLine(member);
@@ -223,7 +223,7 @@ namespace ConsoleApplication1
     }
 }";
         #endregion
-        #region ListOnAMethod
+        #region findCollectionOnAForLoop
         public const string findCollectionOnAForLoop = @"using System;
 using System.Collections.Generic;
 namespace ConsoleApplication1
@@ -242,24 +242,100 @@ namespace ConsoleApplication1
     }
 }";
         #endregion
-
-    }
-}
+        #region findCollectionOnAWhileLoop
+        public const string findCollectionOnAWhileLoop = @"using System;
+using System.Collections.Generic;
 namespace ConsoleApplication1
 {
     class Program
     {
         public static void main()
         {
-            
-            
-            List<string> teste = new List<string> {"das", "sda"};
-            teste.Remove("das");
-            for (int i = 0; i < teste.Count; i++)
+            List<string> teste = new List<string>();
+            int count = 0;
+            while (count < teste.Count)
             {
-                Console.WriteLine(teste[i]);
+                Console.WriteLine(teste[count]);
+                count++;
             }
+            
+        }
+    }
+}";
+        #endregion
 
+        #region findCollectionOnADoubleLoop
+        public const string findCollectionOnADoubleLoop = @"using System;
+using System.Collections.Generic;
+namespace ConsoleApplication1
+{
+    class Program
+    {
+        public static void main()
+        {
+            int count = 0;
+            List<string> teste = new List<string>();
+            while (count < teste.Count)
+            {
+                for (int i = 0; i < teste.Count; i++)
+                {
+                    Console.WriteLine(teste[count]);
+                    count++;
+                }
+                count++;
+            }
+            
+        }
+    }
+}";
+        #endregion
+        #region findCollectionOnADoubleLoop
+        public const string findDoubleCollectionOnADoubleLoop =@"using System;
+using System.Collections.Generic;
+namespace ConsoleApplication1
+{
+    class Program
+    {
+        public static void main()
+        {
+            int count = 0;
+            List<string> teste = new List<string>();
+            List<string> teste2 = new List<string>();
+            while (count < teste.Count)
+            {
+                for (int i = 0; i < teste.Count; i++)
+                {
+                    Console.WriteLine(teste2[i]);
+                }
+                Console.WriteLine(teste[count]);
+                count++;
+            }
+            
+        }
+    }
+}";
+        #endregion
+
+    }
+}
+
+namespace ConsoleApplication1
+{
+    class Program
+    {
+        public static void main()
+        {
+            List<string> teste = new List<string>{"das", "da"};
+
+            int count = 0;
+            while (count < teste.Count)
+            {
+                for (int i = 0; i < teste.Count; i++)
+                {
+                    Console.WriteLine(teste[count]);
+                    count++;
+                }
+            }
         }
     }
 }

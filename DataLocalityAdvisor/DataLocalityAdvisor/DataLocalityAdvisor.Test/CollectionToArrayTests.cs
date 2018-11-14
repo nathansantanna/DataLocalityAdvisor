@@ -17,16 +17,16 @@ namespace DataLocalityAnalyzer.test
     public class CollectionToArrayTests : CodeFixVerifier
     {
         [TestMethod]
-        public void SimpleStructToClassDiagnostic()
+        public void FindCollectionInForEachLoop()
         {
-            var expectedLocation = GetDiagnosticPosition(new[] { Codes.ListOnAMethod }, "teste");
+            var expectedLocation = GetDiagnosticPosition(new[] { Codes.ListOnAForEach }, "teste");
 
             var expectedDiagnosisLocation = new[]
             {
                 new DiagnosticResultLocation("Test0.cs",expectedLocation.Line + 1,expectedLocation.Character + 1),
             };
             var expected = new DiagnosticResult(ConvertToArrayAnalyzer.Rule, expectedDiagnosisLocation);
-            VerifyCSharpDiagnostic(Codes.ListOnAMethod, expected);
+            VerifyCSharpDiagnostic(Codes.ListOnAForEach, expected);
         }
 
         [TestMethod]
@@ -42,17 +42,33 @@ namespace DataLocalityAnalyzer.test
             VerifyCSharpDiagnostic(Codes.findCollectionOnAForLoop, expected);
         }
 
-        public void FindCollectionInCascadeForLoop()
+        [TestMethod]
+        public void FindCollectionInWhileLoop()
         {
-            var expectedLocation = GetDiagnosticPosition(new[] { Codes.findCollectionOnAForLoop }, "teste");
+            var expectedLocation = GetDiagnosticPosition(new[] { Codes.findCollectionOnAWhileLoop }, "teste");
 
             var expectedDiagnosisLocation = new[]
             {
                 new DiagnosticResultLocation("Test0.cs",expectedLocation.Line + 1,expectedLocation.Character + 1),
             };
             var expected = new DiagnosticResult(ConvertToArrayAnalyzer.Rule, expectedDiagnosisLocation);
-            VerifyCSharpDiagnostic(Codes.findCollectionOnAForLoop, expected);
+            VerifyCSharpDiagnostic(Codes.findCollectionOnAWhileLoop, expected);
         }
+
+        [TestMethod]
+        public void FindCollectionInDoubleLoop()
+        {
+            var expectedLocation = GetDiagnosticPosition(new[] { Codes.findCollectionOnADoubleLoop }, "teste");
+
+            var expectedDiagnosisLocation = new[]
+            {
+                new DiagnosticResultLocation("Test0.cs",expectedLocation.Line + 1,expectedLocation.Character + 1),
+            };
+            var expected = new DiagnosticResult(ConvertToArrayAnalyzer.Rule, expectedDiagnosisLocation);
+            VerifyCSharpDiagnostic(Codes.findCollectionOnADoubleLoop, expected);
+        }
+
+        
 
 
         protected override Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider GetCSharpCodeFixProvider()
