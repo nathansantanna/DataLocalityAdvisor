@@ -5,6 +5,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using DataLocalityAdvisor;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CodeActions;
@@ -33,6 +34,9 @@ namespace DataLocalityAnalyzer
 
         public sealed override Task RegisterCodeFixesAsync(CodeFixContext context)
         {
+            var root = context.Document.GetSyntaxRootAsync(context.CancellationToken);
+            var diagnostic = context.Diagnostics.First();
+            var diagnosticSpan = diagnostic.Location.SourceSpan;
             throw new NotImplementedException();
         }
     }

@@ -1,9 +1,10 @@
-﻿using DataLocalityAnalyzer.test.CodesForTest;
+﻿using DataLocalityAnalyzer;
+using DataLocalityAnalyzer.test.CodesForTest;
 using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestHelper;
 
-namespace DataLocalityAnalyzer.test
+namespace CollectionAnalyzer.Test
 {
     [TestClass]
     public class CollectionAnalyzerTests

@@ -1,6 +1,7 @@
 ﻿
 using System.Linq;
 using DataLocalityAdvisor;
+using DataLocalityAnalyzer;
 using DataLocalityAnalyzer.test.CodesForTest;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -11,7 +12,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestHelper;
 
 
-namespace DataLocalityAnalyzer.test
+namespace CollectionToArray.Test
 {
     [TestClass]
     public class CollectionToArrayTests : CodeFixVerifier
@@ -68,8 +69,11 @@ namespace DataLocalityAnalyzer.test
             VerifyCSharpDiagnostic(Codes.findCollectionOnADoubleLoop, expected);
         }
 
-        
-
+        [TestMethod]
+        public void FixUnitializedLists()
+        {
+            VerifyCSharpFix(Codes.findAndFixDoubleCollectionOnADoubleLoop,Codes.FixedDoubleCollectionOnADoubleLoop);
+        }
 
         protected override Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider GetCSharpCodeFixProvider()
         {

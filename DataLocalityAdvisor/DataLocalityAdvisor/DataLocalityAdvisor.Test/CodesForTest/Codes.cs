@@ -316,6 +316,56 @@ namespace ConsoleApplication1
 }";
         #endregion
 
+        #region findAndFixDoubleCollectionOnADoubleLoop
+
+        public const string findAndFixDoubleCollectionOnADoubleLoop = @"using System;
+using System.Collections.Generic;
+namespace ConsoleApplication1
+{
+    class Program
+    {
+        public static void main()
+        {
+            int count = 0;
+            List<string> teste = new List<string>();
+            List<string> teste2 = new List<string>();
+            while (count < teste.Count)
+            {
+                for (int i = 0; i < teste.Count; i++)
+                {
+                    Console.WriteLine(teste2[i]);
+                }
+                Console.WriteLine(teste[count]);
+                count++;
+            }
+            
+        }
+    }
+}";
+        public const string FixedDoubleCollectionOnADoubleLoop = @"using System;
+using System.Collections.Generic;
+class Program
+    {
+        public static void main()
+        {
+            int count = 0;
+            string[] teste = new string[10]; 
+            string[] teste2 = new string[10]; ;
+            while (count < teste.Length)
+            {
+                for (int i = 0; i < teste.Length; i++)
+                {
+                    Console.WriteLine(teste2[i]);
+                }
+                Console.WriteLine(teste[count]);
+                count++;
+            }
+            
+        }
+    }";
+
+        #endregion
+
     }
 }
 
@@ -325,17 +375,19 @@ namespace ConsoleApplication1
     {
         public static void main()
         {
-            List<string> teste = new List<string>{"das", "da"};
-
             int count = 0;
-            while (count < teste.Count)
+            string[] teste = new string[10]; 
+            string[] teste2 = new string[10]; ;
+            while (count < teste.Length)
             {
-                for (int i = 0; i < teste.Count; i++)
+                for (int i = 0; i < teste.Length; i++)
                 {
-                    Console.WriteLine(teste[count]);
-                    count++;
+                    Console.WriteLine(teste2[i]);
                 }
+                Console.WriteLine(teste[count]);
+                count++;
             }
+            
         }
     }
 }

@@ -31,68 +31,30 @@ namespace DataLocalityAnalyzer
 
         private void OnLoopOperation(OperationAnalysisContext operationAnalysisContext)
         {
-            var methodBody = GetParentMethod(operationAnalysisContext);
-            if (methodBody == null)
-                return;
-
-            var collections = FindLocalCollectionsAccessedOnLoop(operationAnalysisContext,methodBody);
+            var collections = FindLocalCollectionsAccessedOnLoop(operationAnalysisContext);
             
             foreach (var collection in collections)
             {
-                if (!CanBeusedAsArray(operationAnalysisContext, collection,methodBody))
+                if (!CanBeusedAsArray(operationAnalysisContext, collection))
                     return;
                 var diagnostic = Diagnostic.Create(Rule, collection.Locations[0]);
                     operationAnalysisContext.ReportDiagnostic(diagnostic);
             }
         }
 
-        private IEnumerable<ILocalSymbol> FindLocalCollectionsAccessedOnLoop(OperationAnalysisContext operationAnalysisContext,  IMethodBodyOperation methodBody)
+        private IEnumerable<ILocalSymbol> FindLocalCollectionsAccessedOnLoop(OperationAnalysisContext operationAnalysisContext)
         {
-            //var operation = operationAnalysisContext.Operation as ILoopOperation;
-            //IEnumerable<SyntaxNode> symbolsAccessedOnLoop;
-            //if (operation.LoopKind == LoopKind.ForEach)
-            //{
-            //    symbolsAccessedOnLoop =  new  List<SyntaxNode>{((IForEachLoopOperation) operation).Collection.Syntax};
-            //}
-            //else
-            //{
-            //    symbolsAccessedOnLoop = operationAnalysisContext.Operation.Syntax.DescendantNodesAndSelf().Where(node =>
-            //        node.Kind() == SyntaxKind.ElementAccessExpression );
-            //}
-            var body = ((IMethodBodyOperation) operationAnalysisContext.).BlockBody;
-            var localCollections =
-                methodBody.BlockBody.Locals.Where(symbol => symbol.Type.ToString().Contains("System.Collections"));
-            
-            //List<ILocalSymbol> returnList = new List<ILocalSymbol>();
-            //foreach (var accessExpressionSyntax in symbolsAccessedOnLoop)
-            //{
-            //   var idenfier = accessExpressionSyntax.DescendantNodesAndSelf().First(node => node.Kind() == SyntaxKind.IdentifierName);
-            //   var tt =  localCollections.Where(symbol => symbol.Name == idenfier.ToString());
-            //    returnList.AddRange(tt);
-            //}
 
+            var body = ((IMethodBodyOperation) operationAnalysisContext.Operation).BlockBody;
+            var localCollections =
+                body.Locals.Where(symbol => symbol.Type.ToString().Contains("System.Collections"));
+            
             return localCollections;
         }
 
-        private IMethodBodyOperation GetParentMethod(OperationAnalysisContext operationContext)
+        private bool CanBeusedAsArray(OperationAnalysisContext operationAnalysisContext, ILocalSymbol collection)
         {
-            var oper  = operationContext.Operation.Parent;
-            int count = 0;
-
-            while (oper.Kind != OperationKind.IsType || count < 50)
-            {
-                if (oper.Kind == OperationKind.MethodBodyOperation)
-                    return (IMethodBodyOperation)oper;
-                    
-                oper = oper.Parent;
-                count++;
-            }
-
-            return null;
-        }
-
-        private bool CanBeusedAsArray(OperationAnalysisContext operationAnalysisContext, ILocalSymbol collection, IMethodBodyOperation methodBody)
-        {
+            var methodBody = operationAnalysisContext.Operation as IMethodBodyOperation;
             var accesses = methodBody.Syntax.DescendantNodesAndSelf().OfType<IdentifierNameSyntax>()
                 .Where(syntax => syntax.Identifier.ToString() == collection.Name);
 
@@ -117,41 +79,3 @@ namespace DataLocalityAnalyzer
         }
     }
 }
-
-//var identifierTokens = operation.Syntax.DescendantNodesAndSelf().
-//    Where(node =>  node.Kind() == SyntaxKind.IdentifierName 
-//                   && node.Parent.Kind() == SyntaxKind.ElementAccessExpression);
-//var tree = operationAnalysisContext.Operation.Syntax.SyntaxTree;
-//var model = operationAnalysisContext.Compilation.GetSemanticModel(tree);
-//var localSymbols = model.LookupSymbols(operation.Syntax.FullSpan.Start).OfType<ILocalSymbol>();
-//foreach (var accessNode in accesses)
-//{
-//    accessNode.DescendantNodesAndSelf().Where(IdentifierNameSyntax);
-//}
-
-//var operation = (ILoopOperation)operationAnalysisContext.Operation;
-//var collections = new List<IdentifierNameSyntax>();
-//List<ILocalSymbol> localsymbols = new List<ILocalSymbol>();
-//var tree = operationAnalysisContext.Operation.Syntax.SyntaxTree;
-//var model = operationAnalysisContext.Compilation.GetSemanticModel(tree);
-
-//var elementsAcessed = operation.Syntax.DescendantNodesAndSelf().OfType<ElementAccessExpressionSyntax>();
-//var localSymbols = model.LookupSymbols(operation.Syntax.FullSpan.Start).OfType<ILocalSymbol>();
-//localsymbols.AddRange(localSymbols.
-//    Where(symbol => symbol.Type.ToString().Contains("System.Collections")));
-//foreach (var accessExpression in elementsAcessed)
-//{
-//    collections.AddRange(accessExpression.DescendantNodesAndSelf().OfType<IdentifierNameSyntax>());
-//}
-
-
-//var methodBlock = operationAnalysisContext.ContainingSymbol.DeclaringSyntaxReferences[0].GetSyntax().ChildNodes().
-//    OfType<BlockSyntax>().First();
-
-//var expresionStatements = methodBlock.ChildNodes().OfType<ExpressionStatementSyntax>();
-//foreach (var expresionStatement in expresionStatements)
-//{
-//    //if (expresionStatement.Expression.ChildTokens()
-//    //    .OfType<IdentifierNameSyntax>();//.Any(syntax => syntax.Identifier == collection.Identifier))
-//        return false;
-//}
