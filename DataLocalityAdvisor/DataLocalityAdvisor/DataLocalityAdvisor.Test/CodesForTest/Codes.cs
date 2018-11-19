@@ -263,7 +263,6 @@ namespace ConsoleApplication1
     }
 }";
         #endregion
-
         #region findCollectionOnADoubleLoop
         public const string findCollectionOnADoubleLoop = @"using System;
 using System.Collections.Generic;
@@ -315,79 +314,135 @@ namespace ConsoleApplication1
     }
 }";
         #endregion
+        #region ListOnAForEach
+        public const string CollectionWithComplexType = @"using System;
+using System.Collections.Generic;
+namespace ConsoleApplication1
+{
+    class complexType {}
+    class Program
+    {
+        public static void main()
+        {
+            List<complexType> teste = new List<complexType>();
+        }
+    }
+}";
+        #endregion
+        #region findAndFixListDeclaration
 
-        #region findAndFixDoubleCollectionOnADoubleLoop
-
-        public const string findAndFixDoubleCollectionOnADoubleLoop = @"using System;
+        public const string findAndFixListDeclaration = @"using System;
 using System.Collections.Generic;
 namespace ConsoleApplication1
 {
     class Program
     {
-        public static void main()
+        public static void Main()
         {
-            int count = 0;
             List<string> teste = new List<string>();
-            List<string> teste2 = new List<string>();
-            while (count < teste.Count)
-            {
-                for (int i = 0; i < teste.Count; i++)
-                {
-                    Console.WriteLine(teste2[i]);
-                }
-                Console.WriteLine(teste[count]);
-                count++;
-            }
-            
         }
     }
 }";
-        public const string FixedDoubleCollectionOnADoubleLoop = @"using System;
+
+        public const string fixedListdeclaration = @"using System;
 using System.Collections.Generic;
-class Program
+namespace ConsoleApplication1
+{
+    class Program
     {
-        public static void main()
+        public static void Main()
         {
-            int count = 0;
-            string[] teste = new string[10]; 
-            string[] teste2 = new string[10]; ;
-            while (count < teste.Length)
-            {
-                for (int i = 0; i < teste.Length; i++)
-                {
-                    Console.WriteLine(teste2[i]);
-                }
-                Console.WriteLine(teste[count]);
-                count++;
-            }
-            
+            string[] teste;
         }
-    }";
+    }
+}";
+
+        #endregion
+        #region findAndFixLisCountMethods
+
+        public const string fixCounts = @"using System;
+using System.Collections.Generic;
+namespace ConsoleApplication1
+{
+    class Program
+    {
+        public static void Main()
+        {
+            List<string> teste = new List<string>();
+            Console.WriteLine(teste.Count);
+            Console.WriteLine(teste.Count);
+        }
+    }
+}";
+
+        public const string fixedCounts = @"using System;
+using System.Collections.Generic;
+namespace ConsoleApplication1
+{
+    class Program
+    {
+        public static void Main()
+        {
+            string[] teste;
+            Console.WriteLine(teste.Length);
+            Console.WriteLine(teste.Length);
+        }
+    }
+}";
+
+        #endregion
+        #region findAndFixListWithInitializer
+
+        public const string listWithInitializer = @"using System;
+using System.Collections.Generic;
+namespace ConsoleApplication1
+{
+    class Program
+    {
+        public static void Main()
+        {
+            List<string> loror = new List<string>()
+            {
+                ""asd"",
+                ""ASD"",
+                ""asd""
+            };
+        }
+    }
+}";
+
+        public const string fixedListWithInitializer = @"using System;
+using System.Collections.Generic;
+namespace ConsoleApplication1
+{
+    class Program
+    {
+        public static void Main()
+        {
+            string[] loror = new string[]
+            {
+                ""asd"",
+                ""ASD"",
+                ""asd""
+            };
+        }
+    }
+}";
 
         #endregion
 
     }
 }
 
+
 namespace ConsoleApplication1
 {
+    class complexType {}
     class Program
     {
         public static void main()
         {
-            int count = 0;
-            string[] teste = new string[10]; 
-            string[] teste2 = new string[10]; ;
-            while (count < teste.Length)
-            {
-                for (int i = 0; i < teste.Length; i++)
-                {
-                    Console.WriteLine(teste2[i]);
-                }
-                Console.WriteLine(teste[count]);
-                count++;
-            }
-            
+            List<complexType> teste = new List<complexType>();
         }
     }
 }

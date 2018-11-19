@@ -57,16 +57,43 @@ namespace DataLocalityAnalyzer
             var methodBody = operationAnalysisContext.Operation as IMethodBodyOperation;
             var accesses = methodBody.Syntax.DescendantNodesAndSelf().OfType<IdentifierNameSyntax>()
                 .Where(syntax => syntax.Identifier.ToString() == collection.Name);
-
+            var containedTypes = collection.DeclaringSyntaxReferences[0].GetSyntax().DescendantNodesAndSelf().OfType<TypeArgumentListSyntax>();
+            foreach (TypeArgumentListSyntax genericTypes in containedTypes)
+            {
+                if (genericTypes.Arguments.Count > 1)
+                    return false;
+                foreach (var type
+                    in genericTypes.Arguments)
+                {
+                   if( !(type.ToString() == "int" 
+                       || type.ToString()== "string" 
+                       || type.ToString()== "char"
+                       || type.ToString()== "Uint"
+                       || type.ToString()== "bool"
+                       || type.ToString()== "float")
+                       )
+                       return false;
+                   
+                }
+                //type.DescendantNodesAndSelf()
+            }
             foreach (var identifierNameSyntax in accesses)
             {
+                
                 var parent = identifierNameSyntax.Parent;
                 if (parent.Kind() != SyntaxKind.ElementAccessExpression &&
                     parent.Kind() != SyntaxKind.VariableDeclarator &&
                     parent.Kind() != SyntaxKind.SimpleMemberAccessExpression &&
                     parent.Kind() != SyntaxKind.ForEachStatement)
                     return false;
-
+                if (parent.Kind() == SyntaxKind.VariableDeclarator)
+                {
+                    var declarator = ((VariableDeclaratorSyntax) parent);
+                    var types = parent.DescendantNodesAndSelf().OfType<PredefinedTypeSyntax>();
+                    if (types.Count() > 1)
+                        return false;
+                    int asdas = 0;
+                }
                 if (parent.Kind() == SyntaxKind.SimpleMemberAccessExpression)
                 {
                     var memberAccessed = ((MemberAccessExpressionSyntax) parent).Name.ToString();

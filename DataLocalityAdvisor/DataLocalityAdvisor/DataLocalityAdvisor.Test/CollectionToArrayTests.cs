@@ -57,6 +57,12 @@ namespace CollectionToArray.Test
         }
 
         [TestMethod]
+        public void IgnoringCollectionsWithComplexTypes()
+        {
+            VerifyCSharpDiagnostic(Codes.CollectionWithComplexType);
+        }
+
+        [TestMethod]
         public void FindCollectionInDoubleLoop()
         {
             var expectedLocation = GetDiagnosticPosition(new[] { Codes.findCollectionOnADoubleLoop }, "teste");
@@ -72,7 +78,19 @@ namespace CollectionToArray.Test
         [TestMethod]
         public void FixUnitializedLists()
         {
-            VerifyCSharpFix(Codes.findAndFixDoubleCollectionOnADoubleLoop,Codes.FixedDoubleCollectionOnADoubleLoop);
+            VerifyCSharpFix(Codes.findAndFixListDeclaration,Codes.fixedListdeclaration,null,true);
+        }
+
+        [TestMethod]
+        public void FixCountsToLength()
+        {
+            VerifyCSharpFix(Codes.fixCounts,Codes.fixedCounts,null,true);
+        }
+
+        [TestMethod]
+        public void FixCollectionWithInitialyzer()
+        {
+            VerifyCSharpFix(Codes.listWithInitializer,Codes.fixedListWithInitializer,null,true);
         }
 
         protected override Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider GetCSharpCodeFixProvider()
