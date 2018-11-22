@@ -36,23 +36,28 @@ namespace Performance_Analyzer
 
             List<ProjectileClass> classList = new List<ProjectileClass>();
 
+            float[] testArray = new float[10000000];
+            List<float> testList = new List<float>();
 
             for (int i = 0; i < count; ++i)
             {
                 classArray[i] = new ProjectileClass();
                 classList.Add(new ProjectileClass());
-
+                testArray[i] = i;
+                testList.Add(i);
                 structArray[i] = new ProjectileStruct();
             }
 
             Shuffle(structArray);
             Shuffle(classArray);
             Shuffle(ref classList);
+            Shuffle(testArray);
+            Shuffle(ref testList);
+
 
             System.Diagnostics.Stopwatch sw = System.Diagnostics.Stopwatch.StartNew();
             long NotOptimized = 0;
             long Optimized = 0;
-            float t;
             switch (test)
             {
                 case TestType.DataStructure:
@@ -76,7 +81,7 @@ namespace Performance_Analyzer
                     #region CollectionTest
                     for (int i = 0; i < count; ++i)
                     {
-                        UpdateProjectile(classArray[i], 0.5f);
+                        var tt =  testArray[i];
                     }
                     Optimized = sw.ElapsedMilliseconds;
                     
@@ -84,7 +89,7 @@ namespace Performance_Analyzer
                     sw.Start();
                     for (int i = 0; i < count; ++i)
                     {
-                        UpdateProjectile(classList[i], 0.5f);
+                        var tt =  testList[i];
                     }
                     NotOptimized = sw.ElapsedMilliseconds;
                     #endregion
