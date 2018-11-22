@@ -13,6 +13,15 @@ namespace DataLocalityAnalyzer
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ConvertToArrayAnalyzer : DiagnosticAnalyzer
     {
+        private string[] _basicTypes =
+        {
+            "decimal",
+            "float",
+            "char",
+            "int",
+            "string",
+            "double",
+        };
         #region DiagnosticDescriptor
         public const string DiagnosticId = "ConversionToArray";
         internal static readonly LocalizableString Title = "Collection Conversion";
@@ -65,13 +74,7 @@ namespace DataLocalityAnalyzer
                 foreach (var type
                     in genericTypes.Arguments)
                 {
-                   if( !(type.ToString() == "int" 
-                       || type.ToString()== "string" 
-                       || type.ToString()== "char"
-                       || type.ToString()== "Uint"
-                       || type.ToString()== "bool"
-                       || type.ToString()== "float")
-                       )
+                    if(!_basicTypes.Contains(type.ToString()))
                        return false;
                    
                 }
@@ -92,7 +95,6 @@ namespace DataLocalityAnalyzer
                     var types = parent.DescendantNodesAndSelf().OfType<PredefinedTypeSyntax>();
                     if (types.Count() > 1)
                         return false;
-                    int asdas = 0;
                 }
                 if (parent.Kind() == SyntaxKind.SimpleMemberAccessExpression)
                 {

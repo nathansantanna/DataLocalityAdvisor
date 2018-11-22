@@ -32,7 +32,7 @@ namespace DataLocalityAdvisor
         private void ClassAnalyzer(SymbolAnalysisContext symbolAnalysisContext)
         {
             var namedSymbol = (INamedTypeSymbol)symbolAnalysisContext.Symbol;
-            if(SymbolUtilities.CanBeStruct(namedSymbol))
+            if(ClassUtilities.CanBeStruct(namedSymbol))
                 symbolAnalysisContext.ReportDiagnostic(Diagnostic.Create(Rule, symbolAnalysisContext.Symbol.Locations[0]));
         }
 

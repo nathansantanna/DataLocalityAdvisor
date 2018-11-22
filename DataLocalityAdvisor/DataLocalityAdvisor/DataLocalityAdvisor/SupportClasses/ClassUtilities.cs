@@ -1,19 +1,9 @@
-﻿using System.Linq;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using Microsoft.CodeAnalysis;
 
 namespace DataLocalityAnalyzer.SupportClasses
 {
-    internal static class SymbolUtilities
+    internal static class ClassUtilities
     {
-        private static Location FindCollectionDeclarationLocation(IdentifierNameSyntax collection)
-        {
-            var root = collection.SyntaxTree.GetRoot();
-            var collectionSymbol = root.DescendantNodesAndSelf().OfType<VariableDeclarationSyntax>()
-                .FirstOrDefault(syntax => syntax.Variables[0].Identifier.Text == collection.Identifier.Text);
-            return collectionSymbol?.GetLocation();
-        }
-
         public static bool CanBeStruct(INamedTypeSymbol symbol)
         {
             if (!IsNamedSymbolValidForConversion(symbol))
@@ -100,7 +90,6 @@ namespace DataLocalityAnalyzer.SupportClasses
                     return true;
             }
             return false;
-
         }
     }
 }

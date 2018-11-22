@@ -433,16 +433,3 @@ namespace ConsoleApplication1
 
     }
 }
-
-
-namespace ConsoleApplication1
-{
-    class complexType {}
-    class Program
-    {
-        public static void main()
-        {
-            List<complexType> teste = new List<complexType>();
-        }
-    }
-}
