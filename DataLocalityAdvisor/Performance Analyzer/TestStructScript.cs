@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,44 +8,63 @@ using System.Threading.Tasks;
 namespace Performance_Analyzer
 {
     using System;
-    class TestScript 
+    class TestScript
     {
-        struct ProjectileStruct 
+        private string path = @"c:\dados\";
+        struct ProjectileStruct
         {
+            public char[] Name;
             public float Position;
             public float Velocity;
+            public float Acceleration;
         }
  
         class ProjectileClass
         {
+            public char[] Name;
             public float Position;
             public float Velocity;
+            public float Acceleration;
         }
 
         public enum TestType
         {
-            DataStructure,
-            Collection,
-            All
+            Estrutura_De_Dados,
+            Coleção,
+            Ambos
         }
- 
+
         public void Start(TestType test)
         {
-            const int count = 10000000;
-            ProjectileStruct[] structArray = new ProjectileStruct[count];
-            ProjectileClass[] classArray = new ProjectileClass[count];
+            int[] tests = {5000000,2500000,1000000,7500000,5000000,2500000};
+            
+            foreach (var t in tests)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    DoTest(t,test);
+                }
+            }
+        }
+
+        public void DoTest(int repetitions, TestType test)
+        {
+            string tempPath = path + "tests.csv";
+            int collectionsSize = repetitions;
+            ProjectileStruct[] structArray = new ProjectileStruct[collectionsSize];
+            ProjectileClass[] classArray = new ProjectileClass[collectionsSize];
 
             List<ProjectileClass> classList = new List<ProjectileClass>();
 
-            float[] testArray = new float[10000000];
-            List<float> testList = new List<float>();
+            ProjectileStruct[] testArray = new ProjectileStruct[collectionsSize];
+            List<ProjectileStruct> testList = new List<ProjectileStruct>();
 
-            for (int i = 0; i < count; ++i)
+            for (int i = 0; i < collectionsSize; ++i)
             {
                 classArray[i] = new ProjectileClass();
                 classList.Add(new ProjectileClass());
-                testArray[i] = i;
-                testList.Add(i);
+                testArray[i] = new ProjectileStruct();
+                testList.Add(new ProjectileStruct());
                 structArray[i] = new ProjectileStruct();
             }
 
@@ -54,93 +74,94 @@ namespace Performance_Analyzer
             Shuffle(testArray);
             Shuffle(ref testList);
 
-
             System.Diagnostics.Stopwatch sw = System.Diagnostics.Stopwatch.StartNew();
             long NotOptimized = 0;
             long Optimized = 0;
+
             switch (test)
             {
-                case TestType.DataStructure:
+                case TestType.Estrutura_De_Dados:
                     #region DataStructureTest
-                    for (int i = 0; i < count; ++i)
+                    for (int i = 0; i < collectionsSize; ++i)
                     {
-                        UpdateProjectile(ref structArray[i], 0.5f);
+                        Update(structArray[i]);
                     }
-                    Optimized = sw.ElapsedMilliseconds;
- 
-                    sw.Reset();
-                    sw.Start();
-                    for (int i = 0; i < count; ++i)
-                    {
-                        UpdateProjectile(classArray[i], 0.5f);
-                    }
-                    NotOptimized = sw.ElapsedMilliseconds;
-                    break;
-                    #endregion
-                case TestType.Collection:
-                    #region CollectionTest
-                    for (int i = 0; i < count; ++i)
-                    {
-                        var tt =  testArray[i];
-                    }
-                    Optimized = sw.ElapsedMilliseconds;
                     
+                    Optimized = sw.ElapsedMilliseconds;
                     sw.Reset();
                     sw.Start();
-                    for (int i = 0; i < count; ++i)
+                    for (int i = 0; i < collectionsSize; ++i)
                     {
-                        var tt =  testList[i];
+                        Update(classArray[i]);
                     }
                     NotOptimized = sw.ElapsedMilliseconds;
+                    break;
+                    #endregion
+                case TestType.Coleção:
+                    #region CollectionTest
+                    for (int i = 0; i < collectionsSize; ++i)
+                    {
+                        Update( testArray[i]);
+                    }
+                    Optimized = sw.ElapsedMilliseconds;
+                    sw.Reset();
+                    sw.Start();
+                    for (int i = 0; i < collectionsSize; ++i)
+                    {
+                        Update(testList[i]);
+                    }
+                    NotOptimized = sw.ElapsedMilliseconds;
+                    
                     #endregion
                     break;
-                case TestType.All:
+                case TestType.Ambos:
                     #region AllTest
 
-                    for (int i = 0; i < count; ++i)
+                    for (int i = 0; i < collectionsSize; ++i)
                     {
-                        UpdateProjectile( ref structArray[i], 0.5f);
+                        Update( structArray[i]);
                     }
                     Optimized = sw.ElapsedMilliseconds;
 
                     Shuffle(classList.ToArray());
                     sw.Reset();
                     sw.Start();
-                    for (int i = 0; i < count; ++i)
+                    for (int i = 0; i < collectionsSize; ++i)
                     {
-                        UpdateProjectile(classList[i], 0.5f);
+                        Update(classList[i]);
                     }
                     NotOptimized = sw.ElapsedMilliseconds;
-
                     #endregion
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(test), test, null);
             }
-            
- 
-            string report = string.Format(
-                "###################################\n"+
-                "{2}\n" +
-                "NotOptimized,{0}\n" +
-                "Optimized,{1}\n"+
-                "###################################\n",
-                NotOptimized,
-                Optimized,
-                test.ToString()
-            );
-            Console.WriteLine(report);
+            File.AppendAllText(tempPath,$"{test},{repetitions},{Optimized},{NotOptimized} \n");
+            Console.WriteLine("test done " + test +"  " +repetitions );
+            Console.WriteLine($"{test},{repetitions},{Optimized},{NotOptimized} \n");
         }
  
-        void UpdateProjectile(ref ProjectileStruct projectile, float time)
+        void Update(ProjectileClass projectile)
         {
-            projectile.Position += projectile.Velocity * time;
+            projectile.Position += projectile.Acceleration;
+            projectile.Position += projectile.Velocity ;
+        }
+
+        void Update(ProjectileStruct projectile)
+        {
+            projectile.Position += projectile.Acceleration;
+            projectile.Position += projectile.Velocity ;
         }
  
-        void UpdateProjectile(ProjectileClass projectile, float time)
-        {
-            projectile.Position += projectile.Velocity * time;
-        }
+        //void Update(ref ProjectileStruct projectile, float time)
+        //{
+        //    projectile.Position += projectile.Velocity * time;
+        //}
+ 
+        //void Update(ProjectileClass projectile, float time)
+        //{
+        //    projectile.Position += projectile.Velocity * time;
+        //}
  
         public static void Shuffle<T>(T[] list)  
         {
