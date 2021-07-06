@@ -5,7 +5,7 @@ using DataLocalityAnalyzer.SupportClasses;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace DataLocalityAdvisor
+namespace DataLocalityAnalyzer
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ConvertClassToStructAnalyzer : DiagnosticAnalyzer

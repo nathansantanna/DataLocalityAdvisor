@@ -13,7 +13,7 @@ namespace DataLocalityAnalyzer
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(CodeFixArrayConversion)), Shared]
     public class CodeFixArrayConversion : CodeFixProvider
     {
-        public const string DiagnosticId = "CodeFixArrayConversion";
+        public const string DiagnosticId = "ConversionToArray";
 
         public sealed override ImmutableArray<string> FixableDiagnosticIds
         {
@@ -30,7 +30,7 @@ namespace DataLocalityAnalyzer
             var diagnostic = context.Diagnostics.First();
             context.RegisterCodeFix(
                 CodeAction.Create(
-                    Resources.LampTitle,
+                    Resources.ArrayLamp,
                     c => GenericCollectionToArray(context),
                     Resources.LampTitle),
                 diagnostic);

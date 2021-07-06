@@ -1,6 +1,5 @@
 ﻿
 using System.Linq;
-using DataLocalityAdvisor;
 using DataLocalityAnalyzer;
 using DataLocalityAnalyzer.test.CodesForTest;
 using Microsoft.CodeAnalysis;

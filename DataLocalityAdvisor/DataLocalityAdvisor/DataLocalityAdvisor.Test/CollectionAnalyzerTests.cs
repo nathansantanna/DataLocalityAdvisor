@@ -1,10 +1,9 @@
-﻿using DataLocalityAnalyzer;
-using DataLocalityAnalyzer.test.CodesForTest;
+﻿using DataLocalityAnalyzer.test.CodesForTest;
 using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestHelper;
 
-namespace CollectionAnalyzer.Test
+namespace DataLocalityAnalyzer.test
 {
     [TestClass]
     public class CollectionAnalyzerTests
@@ -32,7 +31,7 @@ namespace CollectionAnalyzer.Test
         {
             Compilation compilation = DiagnosticVerifier.GetProjectCompilation(Codes.MultiDoc2);
             var localSymbols = CollectionFinder.GetSymbols(compilation);
-            Assert.AreEqual(localSymbols.Count,6);
+            Assert.AreEqual(localSymbols.Count,6); 
         }
 
         [TestMethod]

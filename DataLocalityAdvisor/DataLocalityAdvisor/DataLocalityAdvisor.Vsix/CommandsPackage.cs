@@ -13,7 +13,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.Win32;
 using Task = System.Threading.Tasks.Task;
 
-namespace DataLocalityAdvisor.Vsix
+namespace DataLocalityAnalyzer.Vsix
 {
     /// <summary>
     /// This is the class that implements the package exposed by this assembly.

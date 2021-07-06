@@ -129,6 +129,10 @@
     <value>Transform into struct</value>
     <comment>The title of the diagnostic.</comment>
   </data>
+  <data name="ArrayLamp" xml:space="preserve">
+    <value>Transform into Array</value>
+    <comment>Array codefix lamp text</comment>
+  </data>
   <data name="LampTitle" xml:space="preserve">
     <value>Transform into a struct</value>
   </data>

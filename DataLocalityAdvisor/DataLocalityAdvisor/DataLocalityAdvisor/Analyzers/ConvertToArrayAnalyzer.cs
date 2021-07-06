@@ -25,7 +25,7 @@ namespace DataLocalityAnalyzer
         #region DiagnosticDescriptor
         public const string DiagnosticId = "ConversionToArray";
         internal static readonly LocalizableString Title = "Collection Conversion";
-        internal static readonly LocalizableString MessageFormat = "You can Convert '{0}' to array and improve Data Locality";
+        internal static readonly LocalizableString MessageFormat = "You can convert this collection to array and improve Data Locality";
         internal const string Category = "Data Locality";
         #endregion
         public static DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Warning, true);
@@ -44,7 +44,7 @@ namespace DataLocalityAnalyzer
             
             foreach (var collection in collections)
             {
-                if (!CanBeusedAsArray(operationAnalysisContext, collection))
+                if (!CanBeUsedAsArray(operationAnalysisContext, collection))
                     return;
                 var diagnostic = Diagnostic.Create(Rule, collection.Locations[0]);
                     operationAnalysisContext.ReportDiagnostic(diagnostic);
@@ -61,7 +61,7 @@ namespace DataLocalityAnalyzer
             return localCollections;
         }
 
-        private bool CanBeusedAsArray(OperationAnalysisContext operationAnalysisContext, ILocalSymbol collection)
+        private bool CanBeUsedAsArray(OperationAnalysisContext operationAnalysisContext, ILocalSymbol collection)
         {
             var methodBody = operationAnalysisContext.Operation as IMethodBodyOperation;
             var accesses = methodBody.Syntax.DescendantNodesAndSelf().OfType<IdentifierNameSyntax>()

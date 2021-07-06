@@ -1,11 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2035
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31321.278
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataLocalityAnalyzer", "DataLocalityAdvisor\DataLocalityAdvisor\DataLocalityAnalyzer.csproj", "{8F36A03C-500A-4A5C-8688-03303C06E8A8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataLocalityAnalyzer.test", "DataLocalityAdvisor\DataLocalityAdvisor.Test\DataLocalityAnalyzer.test.csproj", "{CF7AC7A4-18BF-40A1-8351-DF3937C240F5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D9159761-B467-496D-8D55-8B67B7EEBECF} = {D9159761-B467-496D-8D55-8B67B7EEBECF}
+		{3E584CA0-10CE-4515-8B0B-B93FDC460285} = {3E584CA0-10CE-4515-8B0B-B93FDC460285}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLocalityAdvisor.Vsix", "DataLocalityAdvisor\DataLocalityAdvisor.Vsix\DataLocalityAdvisor.Vsix.csproj", "{3E584CA0-10CE-4515-8B0B-B93FDC460285}"
 EndProject

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using TestHelper;
-using DataLocalityAdvisor;
+using DataLocalityAnalyzer;
 using DataLocalityAnalyzer.test.CodesForTest;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;

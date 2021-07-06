@@ -13,10 +13,10 @@ using Microsoft.CodeAnalysis.Editing;
 using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.CodeAnalysis.Rename;
 
-namespace DataLocalityAdvisor
+namespace DataLocalityAnalyzer
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(CodeFixStructToClass)), Shared]
-    public class CodeFixStructToClass : Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider
+    public class CodeFixStructToClass : CodeFixProvider
     {
         public sealed override ImmutableArray<string> FixableDiagnosticIds
         {

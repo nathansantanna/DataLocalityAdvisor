@@ -1,4 +1,4 @@
-﻿namespace DataLocalityAdvisor.Vsix
+﻿namespace DataLocalityAnalyzer.Vsix
 {
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
